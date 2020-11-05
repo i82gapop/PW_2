@@ -1,7 +1,8 @@
 package es.uco.pw.business.contact;
 
 import java.util.ArrayList;
-import java.util.Date;
+//import java.util.Date;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -22,7 +23,7 @@ public class Contact {
 
 	private String name;
 	private String surname;
-	private Date birthday;
+	private java.sql.Date birthday;
 	private String email;
 	ArrayList <String> interests = new ArrayList <String>();
 
@@ -41,7 +42,7 @@ public class Contact {
 	 * */
 
 
-	public Contact(String name, String surname, Date birthday, String email) {
+	public Contact(String name, String surname, java.sql.Date birthday, String email) {
 
 		this.name = name;
 		this.surname = surname;
@@ -60,7 +61,7 @@ public class Contact {
 	 * @param interests A list with the interests of a contact
 	 * */
 
-	public Contact(String name, String surname, Date birthday, String email, ArrayList <String> interests) {
+	public Contact(String name, String surname, java.sql.Date birthday, String email, ArrayList <String> interests) {
 
 		this.name = name;
 		this.surname = surname;
@@ -101,7 +102,7 @@ public class Contact {
 	 * */
 
 
-	public Date getBirthday() {return birthday;}
+	public java.sql.Date getBirthday() {return birthday;}
 
 	/**
 	 * Returns the birthday of a contact in string format
@@ -239,10 +240,5 @@ public class Contact {
 	public String toString(){
 
 		return "Contact {Name: " + name + "; Surname: " + surname + "; Birthdate: " + birthday + "; Email: " + email + "; Interests: " + interests + "}";
-	}
-
-	public String toStringFile(){
-
-		return name + "|" + surname + "|" + getBirthdayString() + "|" + email + "|" + interests;
 	}
 }
