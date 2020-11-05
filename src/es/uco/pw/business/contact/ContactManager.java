@@ -13,11 +13,11 @@ public class ContactManager {
 
     //aqui hacer el menu y no olvidar realizar un singleton (done)
 
-    //funcion de insercion
-    //funcion de borrado
-    //funcion de actualizacion
+    //funcion de insercion (falta por arreglar el tema de la sql date)
+    //funcion de borrado (done)
+    //funcion de actualizacion 
     //funcion de filtrado
-    //funcion de busqueda
+    //funcion de imprimir contactos
     
     // Singleton declaration
     private static ContactManager instance = null;
@@ -39,12 +39,12 @@ public class ContactManager {
         return instance;
     }
 
-        /**
-     * A visual menu of the sytem
-     * @throws ParseException if the format of the dates aren't allowed
-     *
-     * */
-
+    /**
+    * A visual menu of the sytem
+    * @throws ParseException if the format of the dates aren't allowed
+    *
+    **/
+/*
     public void Menu() throws ParseException{
 
         int option = 1;
@@ -81,7 +81,6 @@ public class ContactManager {
 
                     in = new Scanner (System.in);
                     SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-
                     System.out.println("Type the name of the contact below:");
                     buffer = in.nextLine();
                     aux_contact.setName(buffer);
@@ -92,7 +91,9 @@ public class ContactManager {
 
                     System.out.println("Type the Birthday of the contact below: (format: dd-MM-yyyy)");
                     buffer = in.nextLine();
-                    aux_contact.setBirthday(Date.valueOf(buffer));
+                    java.sql.Date date = format.parse(buffer);
+
+                    aux_contact.setBirthday(format.parse(buffer));
 
                     System.out.println("Type the email of the contact below:");
                     buffer = in.next();
@@ -133,12 +134,12 @@ public class ContactManager {
 
                     break;
 
-                /*case 2:
+                case 2:
 
                     in = new Scanner (System.in);
-                        System.out.println("Type the email of the contact to remove below: ");
-                    buff_email = in.next();
-                    RemoveContact(buff_email);
+                    System.out.println("Type the email of the contacmpt to remove below: ");
+                    buffer = in.next();
+                    DAOContact.Delete(DAOContact.QueryByEmail(buffer));
 
                     break;
 
@@ -225,7 +226,7 @@ public class ContactManager {
                         System.out.println("There are no contacts in the database");
                     }
 
-                    break;*/
+                    break;
                 default:
                     System.out.println("Not a valid option. Try again. [0-5]");
             }
@@ -233,14 +234,14 @@ public class ContactManager {
         }
 
     }
-
+*/
     /**
-     * Function that check the existence of a contact with a given email
-     *
-     * @param email Enail for searching of
-     * @return boolean value, true if it exists; false if it doesn't
-     *
-     **/
+    * Function that check the existence of a contact with a given email
+    * 
+    * @param contact Contact for searching of
+    * @return boolean value, true if it exists; false if it doesn't
+    *
+    **/
 
     public boolean checkExistence(Contact contact){
 
@@ -255,7 +256,126 @@ public class ContactManager {
         }
     }
 
+/**
+ * A visual menu to see Search options
+ *
+ **/
+/*
+public void ConsultContact(){
+
+    int option;
+
+    Contact single = new Contact();
+    ArrayList <Contact> compound = new ArrayList <Contact>();
+    String search_term;
+    int search_term_int;
+
+    System.out.println("=====================================");
+    System.out.println("Contact's Consult");
+    System.out.println("=====================================");
+    System.out.println("How do you wish to search for your contact?: ");
+    System.out.println("1. By email");
+    System.out.println("2. By name (name and surname)");
+    System.out.println("3. By interests");
+    System.out.println("4. By age");
+    System.out.println("0. Exit the menu");
+    System.out.println("=====================================");
+    System.out.println("Your option: ");
+    option = in.nextInt();
 
 
+        if(option == 1){
 
+            System.out.println("Type the email of the contact to search: ");
+            search_term = in.next();
+
+            if((single = SearchContactByEmail(search_term)) != null){
+
+                System.out.println("Showing the result of the search: ");
+                System.out.println(single.toString());
+            }
+
+            else{
+
+                System.out.println("No results.");
+            }
+        }
+
+        else if(option == 2){
+
+            System.out.println("Type the full name of the contact to search: ");
+
+            in = new Scanner (System.in);
+
+            search_term = in.nextLine();
+
+            if((compound = SearchContactByFullname(search_term)) != null){
+
+                System.out.println("Showing the results of the search: ");
+
+                for(int i = 0; i < compound.size(); i++){
+
+                    System.out.println(compound.get(i).toString());
+                }
+            }
+
+            else{
+
+                System.out.println("No results.");
+            }
+        }
+
+        else if(option == 3){
+
+            System.out.println("Type the interest of the contact to search: ");
+            search_term = in.next();
+
+            if((compound = SearchContactByInterest(search_term.toUpperCase())) != null){
+
+                System.out.println("Showing the results of the search: ");
+
+                for(int i = 0; i < compound.size(); i++){
+
+                    System.out.println(compound.get(i).toString());
+                }
+            }
+
+            else{
+
+                System.out.println("No results.");
+            }
+        }
+
+        else if (option == 4){
+
+            System.out.println("Type the age of the contact to search: ");
+            search_term_int = in.nextInt();
+
+
+            if((compound = SearchContactByAge(search_term_int)) != null){
+
+                System.out.println("Showing the results of the search: ");
+
+                for(int i = 0; i < compound.size(); i++){
+
+                    System.out.println(compound.get(i).toString());
+                }
+            }
+
+            else{
+
+                System.out.println("No results.");
+            }
+        }
+
+        else{
+
+            System.out.println("Wrong option. Try using a valid option (between 0-4)");
+            option = in.nextInt();
+        }
+
+}
+
+
+*/
 }

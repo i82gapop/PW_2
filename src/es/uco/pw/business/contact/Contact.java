@@ -1,7 +1,6 @@
 package es.uco.pw.business.contact;
 
 import java.util.ArrayList;
-//import java.util.Date;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -163,7 +162,7 @@ public class Contact {
 	 * @param surname Surname of the contact
 	 * */
 
-	public void setSurname(String surname) {this.surname = name;}
+	public void setSurname(String surname) {this.surname = surname;}
 
 	/**
 	 * Sets the birthday of a contact
@@ -172,7 +171,7 @@ public class Contact {
 	 * */
 
 
-	public void setBirthday(Date birthday) {this.birthday = birthday;}
+	public void setBirthday(java.sql.Date birthday) {this.birthday = birthday;}
 
 	/**
 	 * Sets the email of a contact

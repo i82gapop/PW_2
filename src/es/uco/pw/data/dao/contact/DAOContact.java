@@ -252,4 +252,40 @@ public class DAOContact extends ConnectionDB{
 		} 
 		return resul;
 	} 
+
+	public static ArrayList <Contact> QueryByFullname (Contact contact){
+		
+		Statement stmt = null;
+		ArrayList <Contact> resul = new ArrayList <Contact>();
+		Contact aux = null; 
+
+		try {
+			
+			Connection con=getConnection();
+			
+			Properties sql_properties = new Properties();
+			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
+			sql_properties.load(sql_properties_file);
+			String statement = sql_properties.getProperty("QueryByFullname");
+			
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(statement + "'" + contact.getFullname() + "'");
+
+		    while (rs.next()) {
+
+		    	aux = new Contact(rs.getString("Name"), rs.getString("Surname"), null, rs.getString("Email"));
+
+				resul.add(aux);
+		    }
+		   
+		    if (stmt != null) {
+		    	
+		    	stmt.close(); 
+		    }
+		    	
+		} catch (Exception e) {
+			System.out.println(e);
+		} 
+		return resul;
+	} 
 }
