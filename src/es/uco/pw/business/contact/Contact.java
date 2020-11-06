@@ -22,7 +22,7 @@ public class Contact {
 
 	private String name;
 	private String surname;
-	private java.sql.Date birthday;
+	private Date birthday;
 	private String email;
 	ArrayList <String> interests = new ArrayList <String>();
 
@@ -41,7 +41,7 @@ public class Contact {
 	 * */
 
 
-	public Contact(String name, String surname, java.sql.Date birthday, String email) {
+	public Contact(String name, String surname, Date birthday, String email) {
 
 		this.name = name;
 		this.surname = surname;
@@ -60,7 +60,7 @@ public class Contact {
 	 * @param interests A list with the interests of a contact
 	 * */
 
-	public Contact(String name, String surname, java.sql.Date birthday, String email, ArrayList <String> interests) {
+	public Contact(String name, String surname, Date birthday, String email, ArrayList <String> interests) {
 
 		this.name = name;
 		this.surname = surname;
@@ -101,7 +101,7 @@ public class Contact {
 	 * */
 
 
-	public java.sql.Date getBirthday() {return birthday;}
+	public Date getBirthday() {return birthday;}
 
 	/**
 	 * Returns the birthday of a contact in string format
@@ -171,7 +171,7 @@ public class Contact {
 	 * */
 
 
-	public void setBirthday(java.sql.Date birthday) {this.birthday = birthday;}
+	public void setBirthday(Date birthday) {this.birthday = birthday;}
 
 	/**
 	 * Sets the email of a contact
