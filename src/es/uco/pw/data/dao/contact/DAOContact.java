@@ -253,23 +253,27 @@ public class DAOContact extends ConnectionDB{
 		return resul;
 	} 
 
-	public static ArrayList <Contact> QueryByFullname (Contact contact){
+	public static ArrayList <Contact> QueryByFullname (Contact contact){ //done
 		
-		Statement stmt = null;
 		ArrayList <Contact> resul = new ArrayList <Contact>();
 		Contact aux = null; 
 
 		try {
 			
 			Connection con=getConnection();
-			
+
+			String statement = sql_properties.getProperty("QueryByFullname");
+
 			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
-			String statement = sql_properties.getProperty("QueryByFullname");
 			
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(statement + "'" + contact.getFullname() + "'");
+			PreparedStatement stmt = con.prepareStatement(statement);
+			stmt.setString(1, contact.getName());
+			stmt.setString(2, contact.getSurname());
+			ResultSet rs = stmt.executeQuery();
+			display(rs);
+
 
 		    while (rs.next()) {
 
@@ -287,5 +291,43 @@ public class DAOContact extends ConnectionDB{
 			System.out.println(e);
 		} 
 		return resul;
-	} 
+	}
+	
+	
+
+
+
+	public ArrayList<Contact> QueryByInterests(ArrayList <String> interests){
+		ArrayList <Contact> contacs = new ArrayList <Contact>();
+		ArrayList <String> aux_interests = new ArrayList <String>();
+
+
+		try{
+
+
+			Contact contact = null;
+			Connection con = getConnection();
+			String statement = sql_properties.getProperty("QueryByInterests");
+			PreparedStatement stmt = con.prepareStatement(statement);
+
+			ResultSet rs = stmt.executeQuery();
+			boolean comp = true;
+
+			while(rs.next()){
+				if(contact != null && (contact.getEmail().equals(rs.getString()))){
+					if(rs.getString() != null){
+
+					}
+				}
+			}
+
+
+
+			
+
+		}
+
+
+
+	}
 }
