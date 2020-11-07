@@ -11,7 +11,33 @@ import java.util.Properties;
 import es.uco.pw.data.dao.common.ConnectionDB;
 import es.uco.pw.business.contact.Contact;
 
+
+
+/**
+ * A class to represent the DAO interest and its functions
+ * @author Pedro Pablo Garcia Pozo
+ * @author Ruben Borrego Canovaca
+ * @since 4-11-2020
+ * @version 2.0
+ *
+ * */
+
+
 public class DAOInterest extends ConnectionDB{
+
+
+
+
+/**
+ * Function that saves a given contact to the database CI
+ *
+ * @param contact Contact to add
+ * @return integer value, it represents the status of the action
+ *
+ **/
+
+
+
 
     public static int Save(Contact contact){
 		
@@ -39,6 +65,17 @@ public class DAOInterest extends ConnectionDB{
 		return status;
 	}
 
+
+
+
+
+
+/**
+ * Function that shows all the contacts in the database CI
+ *
+ * @return ArrayList <String> value, a list with all the contacts with their interests
+ *
+ **/
 
     public static ArrayList <String> ListInterests(){
 
@@ -73,6 +110,15 @@ public class DAOInterest extends ConnectionDB{
 		return resul;
     }
 
+
+/**
+ * Function that queries interests in the database from a given contact
+ *
+ * @param contact Contact to query
+ * @return ArrayList <String>, a list of interests the given contact has
+ *
+ **/
+
     public static ArrayList <String> QueryInterestsByContact(Contact contact){
 
 		Statement stmt = null; 
@@ -105,7 +151,15 @@ public class DAOInterest extends ConnectionDB{
 		} 
 		return resul;
     }
-    
+	
+	
+/**
+ * Function that deletes a given contact from the database
+ *
+ * @param contact Contact to delete
+ * @return integer value, it represents the status of the action
+ *
+ **/
     public static int Delete(Contact contact){
 		
 		int status=0;
@@ -126,7 +180,19 @@ public class DAOInterest extends ConnectionDB{
 		
 		return status;
     }
-    
+	
+	
+
+
+/**
+ * Function that queries contacts in the database from a given list of interests to search for
+ *
+ * @param interests list of interests to search for
+ * @return ArrayList <Contact>, a list of contacts with the given list
+ *
+ **/
+
+
     public static ArrayList<Contact> QueryByInterests(ArrayList <String> interests){
 
         Statement stmt = null; 

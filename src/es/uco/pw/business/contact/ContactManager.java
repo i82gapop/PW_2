@@ -9,9 +9,22 @@ import java.util.StringTokenizer;
 import es.uco.pw.data.dao.contact.DAOContact;
 import es.uco.pw.data.dao.interest.DAOInterest;
 
+
+/**
+ * A class to represent manager for contacts
+ * @author Pedro Pablo Garcia Pozo
+ * @author Ruben Borrego Canovaca
+ * @since 4-11-2020
+ * @version 2.0
+ *
+ * */
+
+
+
+
+
 public class ContactManager {
 
-    //introducir la contraseña en todos los sitios que sea necesario de esta clase y de las demás
     
     // Singleton declaration
     private static ContactManager instance = null;
@@ -367,6 +380,15 @@ public class ContactManager {
         }
     }
 
+
+
+    /**
+    * Function that check if the contact database is empty
+    * 
+    * @return boolean value, true if it is; false if it isn't
+    *
+    **/
+
     public boolean isEmpty(){
 
         if(DAOContact.ListContacts() == null){
@@ -378,7 +400,7 @@ public class ContactManager {
     }
 
     /**
-    * A visual menu to see Search options
+    * A visual menu to see Consult options
     *
     **/
 

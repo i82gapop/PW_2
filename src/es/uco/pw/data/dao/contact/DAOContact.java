@@ -7,8 +7,29 @@ import java.util.Properties;
 import es.uco.pw.business.contact.Contact;
 import es.uco.pw.data.dao.common.ConnectionDB;
 
+
+
+/**
+ * A class to represent the DAO contact and its functions
+ * @author Pedro Pablo Garcia Pozo
+ * @author Ruben Borrego Canovaca
+ * @since 4-11-2020
+ * @version 2.0
+ *
+ * */
+
 public class DAOContact extends ConnectionDB{
 	
+
+
+/**
+ * Function that saves a given contact to the database
+ *
+ * @param contact Contact to add
+ * @return integer value, it represents the status of the action
+ *
+ **/
+
 	public static int Save(Contact contact){
 		
 		int status=0;
@@ -35,6 +56,14 @@ public class DAOContact extends ConnectionDB{
 		return status;
 	}
 	
+
+/**
+ * Function that updates a given contact in the database
+ *
+ * @param contact Contact to update
+ * @return integer value, it represents the status of the action
+ *
+ **/
 	public static int Update(Contact contact){
 		
 		int status=0;
@@ -59,6 +88,16 @@ public class DAOContact extends ConnectionDB{
 		return status;
 	}
 
+
+
+/**
+ * Function that updates the password of a given contact in the database
+ *
+ * @param contact Contact which password is going to be updated
+ * @return integer value, it represents the status of the action
+ *
+ **/
+
 	public static int UpdatePassword(Contact contact){
 		
 		int status=0;
@@ -82,7 +121,14 @@ public class DAOContact extends ConnectionDB{
 	}
 
 
-	
+/**
+ * Function that deletes a given contact from the database
+ *
+ * @param contact Contact to delete
+ * @return integer value, it represents the status of the action
+ *
+ **/
+
 	public static int Delete(Contact contact){
 		
 		int status=0;
@@ -103,6 +149,14 @@ public class DAOContact extends ConnectionDB{
 		
 		return status;
 	}
+
+
+/**
+ * Function that shows all the contact in the database
+ *
+ * @return ArrayList <Contact> value, a list with all the contacts
+ *
+ **/
 	
 	public static ArrayList <Contact> ListContacts(){
 
@@ -140,6 +194,15 @@ public class DAOContact extends ConnectionDB{
 		return resul;
 	}
 
+
+/**
+ * Function that queries a contact in the database from a given contact with the email to search for
+ *
+ * @param contact Contact to query
+ * @return Contact, the contact with the full information
+ *
+ **/
+
 	public static Contact QueryByEmail (Contact contact){
 		
 		Statement stmt = null; 
@@ -172,6 +235,14 @@ public class DAOContact extends ConnectionDB{
 		} 
 		return resul;
 	} 
+
+/**
+ * Function that queries contacts in the database from a given contact with the name to search for
+ *
+ * @param contact Contact to query
+ * @return ArrayList <Contact>, a list of contacts with the given name
+ *
+ **/
 
 	public static ArrayList <Contact> QueryByName (Contact contact){
 		
@@ -209,6 +280,14 @@ public class DAOContact extends ConnectionDB{
 		return resul;
 	} 
 	
+/**
+ * Function that queries contacts in the database from a given contact with the surname to search for
+ *
+ * @param contact Contact to query
+ * @return ArrayList <Contact>, a list of contacts with the given surname
+ *
+ **/
+
 	public static ArrayList <Contact> QueryBySurname (Contact contact){
 		
 		Statement stmt = null; 
@@ -244,6 +323,14 @@ public class DAOContact extends ConnectionDB{
 		} 
 		return resul;
 	} 
+
+/**
+ * Function that queries contacts in the database from a given contact with the fullname to search for
+ *
+ * @param contact Contact to query
+ * @return ArrayList <Contact>, a list of contacts with the given fullname
+ *
+ **/
 
 	public static ArrayList <Contact> QueryByFullname (Contact contact){
 		
@@ -283,6 +370,14 @@ public class DAOContact extends ConnectionDB{
 		return resul;
 	}
 
+
+	/**
+ * Function that queries contacts in the database from a given contact with the age to search for
+ *
+ * @param contact Contact to query
+ * @return ArrayList <Contact>, a list of contacts with the given age
+ *
+ **/
 	public static ArrayList <Contact> QueryByAge (int Age){
 		
 		Statement stmt = null; 

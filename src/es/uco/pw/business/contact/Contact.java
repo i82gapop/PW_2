@@ -7,10 +7,10 @@ import java.util.Calendar;
 
 
 /**
- * A class to represent a contact
+ * A class to represent the DTO contact
  * @author Pedro Pablo Garcia Pozo
  * @author Ruben Borrego Canovaca
- * @since 26-09-2020
+ * @since 4-11-2020
  * @version 2.0
  *
  * */
@@ -154,11 +154,20 @@ public class Contact {
 
 	public int getAge(){
 
-		Calendar calendar = Calendar.getInstance();
-		int actual = calendar.get(Calendar.YEAR);
-		calendar.setTime(birthday);
-		int birth = calendar.get(Calendar.YEAR);
-		return actual - birth;
+
+		Calendar birth = Calendar.getInstance();
+		Calendar actualDate = Calendar.getInstance();
+		birth.setTime(birthday);
+
+		int year = actualDate.get(Calendar.YEAR)- birth.get(Calendar.YEAR);
+		int month = actualDate.get(Calendar.MONTH)- birth.get(Calendar.MONTH);
+		int day = actualDate.get(Calendar.DATE)- birth.get(Calendar.DATE);
+
+		if(month<0 || (month==0 && day<0)){
+			year--;
+		}
+
+		return year;
 	}
 
 	/**

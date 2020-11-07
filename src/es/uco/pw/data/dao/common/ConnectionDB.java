@@ -7,6 +7,17 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
 
+
+/**
+ * A class to make the connection to the database
+ * @author Pedro Pablo Garcia Pozo
+ * @author Ruben Borrego Canovaca
+ * @since 4-11-2020
+ * @version 2.0
+ *
+ * */
+
+
 public class ConnectionDB {
 
     public static Connection getConnection() throws IOException{
