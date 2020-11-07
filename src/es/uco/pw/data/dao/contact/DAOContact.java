@@ -23,7 +23,7 @@ public class DAOContact extends ConnectionDB{
 
 
 /**
- * Function that saves a given contact to the database
+ * Function that saves a given contact to the database Contacts
  *
  * @param contact Contact to add
  * @return integer value, it represents the status of the action
@@ -371,7 +371,7 @@ public class DAOContact extends ConnectionDB{
 	}
 
 
-	/**
+/**
  * Function that queries contacts in the database from a given contact with the age to search for
  *
  * @param contact Contact to query

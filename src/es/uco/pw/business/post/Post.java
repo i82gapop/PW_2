@@ -2,7 +2,6 @@ package es.uco.pw.business.post;
 
 import java.text.SimpleDateFormat;
 import java.sql.Date;
-import java.util.ArrayList;
 import es.uco.pw.business.contact.Contact;
 
 /**
@@ -13,90 +12,229 @@ import es.uco.pw.business.contact.Contact;
  * @version 2.0
  * */
 
+public abstract class Post {
 
-public class Post {
+    
+      //Attributes
 
-    private int identifier;
-    private Type type;
-    private Status status;
-    private String title;
-    private String body;
-    private Contact owner;
-    private Date publication;
-    private Date date_start;
-    private Date date_end;
-    private ArrayList <String> recipients = new ArrayList <String>();
-    private ArrayList <String> interests = new ArrayList <String>();
-
-    public int getIdentifier() {return identifier;}
-
-    public Type getType() {return type;}
-
-    public Status getStatus() {return status;}
-
-    public String getTitle(){return title;}
-
-    public String getBody(){return body;}
-
-    public Contact getOwner(){return owner;}
-
-    public Date getPublication(){return publication;}
-
-    public Date getDate_start(){return date_start;}
-
-    public Date getDate_end(){return date_end;}
-
-    public ArrayList<String> getRecipients(){return recipients;}
-
-    public ArrayList<String> getInterests(){return interests;}
-
-    public void setIdentifier(int identifier) {this.identifier = identifier;}
-
-    public void setType(Type type) {this.type = type;}
-
-    public void setStatus(Status status) {this.status = status;}
-
-    public void setTitle(String title) {this.title = title;}
-
-    public void setBody(String body) {this.body = body;}
-
-    public void setOwner(Contact owner) {this.owner = owner;}
-
-    public void setPublication(Date publication) {this.publication = publication;}
-
-    public void setDate_start(Date date_start) {this.date_start = date_start;}
-
-    public void setDate_end(Date date_end) {this.date_end = date_end;}
-
-    public void setRecipients(ArrayList<String> recipients) {this.recipients = recipients;}
-
-    public void setInterests(ArrayList<String> interests) {this.interests = interests;}
-
-    public String toString(){
-
-        if(this.type == Type.GENERAL){
-
-            return "Post {ID: " + identifier + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "}";
-        }
-
-        else if(this.type == Type.INDIVIDUALIZED){
-
-            return "Post {ID: " + identifier + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "; Recipients: " +  recipients + "}";
-        }
-
-        else if(this.type == Type.THEMATIC){
-
-            return "Post {ID: " + identifier + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "; Interests: " +  recipients + "}";
-        }
-
-        else if(this.type == Type.FLASH){
-
-            return "Post {ID: " + identifier + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "; Starting Date: " + date_start + "; Ending Date: " + date_end + "}";
-        }
-
-        else{
-
-            return "ERROR IN toString()";
-        }
-    }
+      protected int identifier;
+      protected String title;
+      protected String body;
+      protected Contact owner;
+      protected Date publication;
+      protected Status status;
+      protected Type type;
+  
+  
+      /**
+         * Empty (default) constructor
+         * */
+      public Post(){};
+  
+  
+      /**
+         * Parameterized constructor
+         * @param identifier The identifier of the post
+         * @param title The title of the post
+         * @param body The body of the post
+         * @param owner The owner of the post
+         * */
+  
+      public Post(int identifier, String title, String body, Contact owner){
+  
+          this.identifier = identifier;
+          this.title = title;
+          this.body = body;
+          this.owner = owner;
+      }
+  
+  
+      /**
+         * Returns the type of a post
+         *
+         * @return Type of the post
+            * */
+      public Type getType(){return type;}
+  
+      /**
+       * Returns the id of a post
+       *
+       * @return ID of the post
+       * */
+      public int getIdentifier() {return identifier;}
+  
+      /**
+       * Returns the title of a post
+       *
+       * @return Title of the post
+       * */
+  
+  
+      public String getTitle() {return title;}
+  
+      /**
+       * Returns the body of a post
+       *
+       * @return Body of the post
+       * */
+  
+  
+      public String getBody() {return body;}
+  
+  
+      /**
+       * Returns the owner of a post
+       *
+       * @return Owner of the post
+       * */
+  
+  
+      public Contact getOwner() {return owner;}
+  
+  
+      /**
+       * Returns the date of publication of a post
+       *
+       * @return Date of publication of the post
+       * */
+  
+  
+  
+      public Date getPublication() {return publication;}
+  
+      /**
+       * Returns the status of a post
+       *
+       * @return Status of the post
+       * */
+  
+  
+      public Status getStatus() {return status;}
+  
+      /**
+       * Auxiliar function to see the status as a string
+       *
+       * */
+  
+      public String getStatusString(){
+  
+          return status.name();
+      }
+  
+  
+      /**
+       * Auxiliar function to see the type as a string
+       *
+       * */
+      public String getTypeString(){
+  
+          return type.name();
+      }
+  
+  
+      /**
+       * Auxiliar function to see the date of publication as a string
+       *
+       * */
+      public String getPublicationString(){
+  
+          SimpleDateFormat date_format = new SimpleDateFormat("HH:mm/dd-MM-yyyy");
+  
+          if(publication!=null){
+  
+              return date_format.format(publication);
+          }
+  
+          else{
+  
+              return null;
+          }
+      }
+  
+      public String getPublicationStringNoHour(){
+  
+          SimpleDateFormat date_format = new SimpleDateFormat("dd-MM-yyyy");
+  
+          if(publication!=null){
+  
+              return date_format.format(publication);
+          }
+  
+          else{
+  
+              return null;
+          }
+      }
+      
+  
+      /**
+         * Sets the id of a post
+         *
+         * @param identifier id of the post
+         * */
+      public void setIdentifier(int identifier){this.identifier = identifier;}
+  
+      /**
+       * Sets the title of a post
+       *
+       * @param title Title of the post
+       * */
+  
+  
+      public void setTitle(String title){this.title = title;}
+  
+      /**
+       * Sets the body of a post
+       *
+       * @param body body of the post
+       * */
+  
+      public void setBody(String body){this.body = body;}
+  
+      /**
+       * Sets the owner of a post
+       *
+       * @param owner owner of the post
+       * */
+  
+  
+      public void setOwner(Contact owner){this.owner = owner;}
+  
+      /**
+       * Sets the date of publication of a post
+       *
+       * @param date date of publication of the post
+       * */
+  
+  
+      public void setPublication(Date date){this.publication = date;}
+  
+      /**
+       * Sets the status of a post
+       *
+       * @param status status of the post
+       * */
+  
+  
+      public void setStatus(Status status) {this.status = status;}
+  
+      /**
+       * Sets the type of a post
+       *
+       * @param type Type of the post
+       * */
+  
+  
+  
+      public void setType(Type type){this.type = type;}
+  
+  
+      /**
+         * Auxiliar functions to see the info of a post
+         *
+         * */
+      public String toString(){
+  
+          return "Post {ID: " + identifier + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "}";
+      }
 }

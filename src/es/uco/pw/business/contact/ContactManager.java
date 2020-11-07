@@ -83,7 +83,6 @@ public class ContactManager {
 
                 case 0:
 
-                    System.out.println("Saving all changes in the file.............");
                     System.out.println("All under control.");
                     System.out.println("Have a nice day, thank you for trusting on us");
 
