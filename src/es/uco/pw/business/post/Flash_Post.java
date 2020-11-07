@@ -4,13 +4,13 @@ import java.text.SimpleDateFormat;
 import java.sql.Date;
 import es.uco.pw.business.contact.Contact;
 
-/**
- * A concrete post in the factory
- * @author Pedro Pablo Garcia Pozo
- * @author Ruben Borrego Canovaca
- * */
-
-public class Flash_Post extends Post{
+        /**
+         * A concrete post in the factory
+         * @author Pedro Pablo Garcia Pozo
+         * @author Ruben Borrego Canovaca
+         **/
+        
+        public class Flash_Post extends Post{
 
 
         //Attributes
