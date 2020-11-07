@@ -1,20 +1,24 @@
 package es.uco.pw.business.post;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
-import es.uco.pw.business.contact.*;
+import es.uco.pw.business.contact.Contact;
+import es.uco.pw.business.contact.ContactManager;
 import es.uco.pw.data.dao.contact.DAOContact;
+import es.uco.pw.data.dao.interest.DAOInterest;
 import es.uco.pw.data.dao.post.DAOPost;
 
 
 public class PostManager {
 
     private static PostManager instance = null;
+    SimpleDateFormat format = new SimpleDateFormat("HH:mm/dd-MM-yyyy");
     private Scanner in = new Scanner (System.in);
     private ContactManager contact_manager = ContactManager.getInstance();
-
 
     private PostManager(){}
 
@@ -33,7 +37,7 @@ public class PostManager {
     public void Menu() throws ParseException{
 
         Contact aux_contact = new Contact();
-        String buffer = in.next();
+        String buffer;
 
         System.out.println("ADVERTISEMENTS MANAGEMENT SYSTEM");
         System.out.println("Type your email to login in: ");
@@ -49,7 +53,10 @@ public class PostManager {
 
             if(aux_contact.getPassword().equals(buffer)){
                 
-                String buff_title, buff_body, log_username, buff_interest, buff_recipients, buff_date_start, buff_date_end;
+                String buff_title, buff_body;
+                java.sql.Date buff_date_start, buff_date_end;
+                //ArrayList <String> buff_interests = new ArrayList<String>();
+                Contact capsule = new Contact();
 
                 int option = 1;
 
@@ -103,7 +110,7 @@ public class PostManager {
                             switch(sub_option){
                                 
                                 case 0:
-
+                                
                                     System.out.println("Cancelled");
                                     
                                     break;
@@ -118,22 +125,138 @@ public class PostManager {
                                     System.out.println("Type the body of the post: ");
                                     buff_body = in.nextLine();
 
+                                    aux_post = aux_post_creator.getPost(0, Type.GENERAL, buff_title, buff_body, aux_contact, null, null, null, null);
+                                    aux_post.setType(Type.GENERAL);
+
+                                    DAOPost.Save(aux_post);
+
                                     System.out.println("Post created successfully.");
 
-                                    aux_post = aux_post_creator.getPost(0, Type.GENERAL, buff_title, buff_body, aux_contact, null, null, null, null);
-
-                                    DAOPost.SaveGeneral(aux_post);
-
-                                    
                                     break;
+
                                 case 2:
+
+                                    in = new Scanner (System.in);
+                                    System.out.println("Type the title of the post: ");
+                                    buff_title = in.nextLine();
+                                    
+
+                                    System.out.println("Type the body of the post: ");
+                                    buff_body = in.nextLine();
+
+                                    ArrayList <String> interests_list = DAOInterest.ListInterests();
+
+                                    System.out.println("What interests does your post have from the following: " + interests_list);
+
+                                    in = new Scanner (System.in);
+
+                                    buffer = in.nextLine();
+                                    StringTokenizer interests = new StringTokenizer(buffer.replace(" ", ""), ",");
+                                    ArrayList <String> token_interests = new ArrayList <String>();
+
+                                    while(interests.hasMoreTokens()){
+
+                                        token_interests.add(interests.nextToken().toUpperCase());
+                                    }
+
+                                    for(int i = 0; i < token_interests.size(); i++){
+
+                                        if(interests_list.contains(token_interests.get(i))){
+
+                                            capsule.addInterest(token_interests.get(i));
+                                        }
+                                    }
+
+                                    aux_post = aux_post_creator.getPost(0, Type.THEMATIC, buff_title, buff_body, aux_contact, null, null, null, capsule.getInterests());
+                                    aux_post.setType(Type.THEMATIC);
+
+                                    DAOPost.Save(aux_post);
+
+                                    System.out.println("Post created successfully.");
+
                                     break;
+
                                 case 3:
+
+                                    ArrayList <String> buff_recipients = new ArrayList<String>();
+
+                                    in = new Scanner (System.in);
+                                    System.out.println("Type the title of the post: ");
+                                    buff_title = in.nextLine();
+                                    
+
+                                    System.out.println("Type the body of the post: ");
+                                    buff_body = in.nextLine();
+
+                                    System.out.println("What recipients do you want the post to have: ");
+
+                                    in = new Scanner (System.in);
+
+                                    buffer = in.nextLine();
+                                    StringTokenizer recipients = new StringTokenizer(buffer.replace(" ", ""), ",");
+                                    ArrayList <String> token_recipients = new ArrayList <String>();
+
+                                    while(recipients.hasMoreTokens()){
+
+                                        token_recipients.add(recipients.nextToken());
+                                    }
+
+                                    for(int i = 0; i < token_recipients.size(); i++){
+
+                                        capsule.setEmail(token_recipients.get(i));
+
+                                        if(DAOContact.QueryByEmail(capsule)!=null){
+
+                                            buff_recipients.add(token_recipients.get(i));
+                                        }
+                                    }
+
+                                    aux_post = aux_post_creator.getPost(0, Type.INDIVIDUALIZED, buff_title, buff_body, aux_contact, null, null, buff_recipients, null);
+                                    aux_post.setType(Type.INDIVIDUALIZED);
+
+                                    DAOPost.Save(aux_post);
+
+                                    System.out.println("Post created successfully.");
+
                                     break;
+
                                 case 4:
+
+                                    java.util.Date date = new java.util.Date();
+
+                                    in = new Scanner (System.in);
+                                    System.out.println("Type the title of the post: ");
+                                    buff_title = in.nextLine();
+                                    
+
+                                    System.out.println("Type the body of the post: ");
+                                    buff_body = in.nextLine();
+
+                                    System.out.println("When do you want to post it?: (format: HH:mm/dd-MM-yyyy)");
+                                    buffer = in.nextLine();
+                                    date = format.parse(buffer); 
+                                    buff_date_start = new java.sql.Date(date.getTime());
+
+                                    System.out.println("When do you want to archive it?: (format: HH:mm/dd-MM-yyyy)");
+                                    buffer = in.nextLine();
+                                    date = format.parse(buffer); 
+                                    buff_date_end = new java.sql.Date(date.getTime());
+
+                                    java.sql.Timestamp date_start_timestamp = new java.sql.Timestamp(date.getTime());
+
+                                    System.out.println("Timestamp: " + date_start_timestamp);
+
+                                    aux_post = aux_post_creator.getPost(0, Type.FLASH, buff_title, buff_body, aux_contact, buff_date_start, buff_date_end, null, null);
+                                    aux_post.setType(Type.FLASH);
+
+                                    DAOPost.Save(aux_post);
+
+                                    System.out.println("Post created successfully.");
+
                                     break;
                                 
-                            }
+                            }//aqui termina el switch de crear posts
+
                             break;
 
                         case 2:

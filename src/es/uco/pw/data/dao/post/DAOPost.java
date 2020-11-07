@@ -1,6 +1,7 @@
 package es.uco.pw.data.dao.post;
 
 import java.io.FileInputStream;
+import java.security.Principal;
 import java.sql.*;
 import java.util.Properties;
 
@@ -20,7 +21,7 @@ public class DAOPost extends ConnectionDB{
 			
 			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
-			sql_properties.load(sql_properties_file);
+            sql_properties.load(sql_properties_file);
             
             if(post.getType().equals(Type.GENERAL)){
 
@@ -28,14 +29,27 @@ public class DAOPost extends ConnectionDB{
                 aux_post = (General_Post)post;
                 String statement = sql_properties.getProperty("InsertGeneralPost");
 
-                PreparedStatement ps=con.prepareStatement(statement);
+                PreparedStatement ps=con.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1,aux_post.getTypeString());
-                ps.setString(2,aux_post.getStatusString());
+                ps.setString(2,"EDITED");
                 ps.setString(3,aux_post.getTitle());
                 ps.setString(4,aux_post.getBody());
                 ps.setString(5, aux_post.getOwner().getEmail());
 
                 status = ps.executeUpdate();
+
+                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+
+                        int id;
+                        id = generatedKeys.getInt(1);
+
+                        System.out.println("El post creado tendra asignada la ID: " + "<" + id+ ">");
+                    }
+                    else {
+                        throw new SQLException("Creating user failed, no ID obtained.");
+                    }
+                }
             }
     
             else if(post.getType().equals(Type.INDIVIDUALIZED)){
@@ -46,12 +60,25 @@ public class DAOPost extends ConnectionDB{
 
                 PreparedStatement ps=con.prepareStatement(statement);
                 ps.setString(1,aux_post.getTypeString());
-                ps.setString(2,aux_post.getStatusString());
-                ps.setString(3,post.getTitle());
-                ps.setString(4,post.getBody());
-                ps.setString(5, post.getOwner().getEmail());
+                ps.setString(2,"EDITED");
+                ps.setString(3,aux_post.getTitle());
+                ps.setString(4,aux_post.getBody());
+                ps.setString(5, aux_post.getOwner().getEmail());
 
                 status = ps.executeUpdate();
+
+                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+
+                        int id;
+                        id = generatedKeys.getInt(1);
+
+                        System.out.println("El post creado tendra asignada la ID: " + "<" + id+ ">");
+                    }
+                    else {
+                        throw new SQLException("Creating user failed, no ID obtained.");
+                    }
+                }
             }
     
             else if(post.getType().equals(Type.THEMATIC)){
@@ -61,13 +88,26 @@ public class DAOPost extends ConnectionDB{
                 String statement = sql_properties.getProperty("InsertThematicPost");
 
                 PreparedStatement ps=con.prepareStatement(statement);
-                ps.setString(1,post.getTypeString());
-                ps.setString(2,post.getStatusString());
-                ps.setString(3,post.getTitle());
-                ps.setString(4,post.getBody());
-                ps.setString(5, post.getOwner().getEmail());
+                ps.setString(1,aux_post.getTypeString());
+                ps.setString(2,"EDITED");
+                ps.setString(3,aux_post.getTitle());
+                ps.setString(4,aux_post.getBody());
+                ps.setString(5, aux_post.getOwner().getEmail());
 
                 status = ps.executeUpdate();
+
+                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+
+                        int id;
+                        id = generatedKeys.getInt(1);
+
+                        System.out.println("El post creado tendra asignada la ID: " + "<" + id+ ">");
+                    }
+                    else {
+                        throw new SQLException("Creating user failed, no ID obtained.");
+                    }
+                }
             }
     
             else{
@@ -77,17 +117,32 @@ public class DAOPost extends ConnectionDB{
                 String statement = sql_properties.getProperty("InsertFlashPost");
 
                 PreparedStatement ps=con.prepareStatement(statement);
-                ps.setString(1,post.getTypeString());
-                ps.setString(2,post.getStatusString());
-                ps.setString(3,post.getTitle());
-                ps.setString(4,post.getBody());
-                ps.setString(5, post.getOwner().getEmail());
+                ps.setString(1,aux_post.getTypeString());
+                ps.setString(2,"EDITED");
+                ps.setString(3,aux_post.getTitle());
+                ps.setString(4,aux_post.getBody());
+                ps.setString(5, aux_post.getOwner().getEmail());
+                ps.setDate(6, aux_post.getDateStart());
+                ps.setDate(7, aux_post.getDateEnd());
 
                 status = ps.executeUpdate();
+
+                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+
+                        int id;
+                        id = generatedKeys.getInt(1);
+
+                        System.out.println("El post creado tendra asignada la ID: " + "<" + id+ ">");
+                    }
+                    else {
+                        throw new SQLException("Creating user failed, no ID obtained.");
+                    }
+                }
             }  
 
 		}catch(Exception e){System.out.println(e);}
 		
 		return status;
-	}
+    }    
 }
