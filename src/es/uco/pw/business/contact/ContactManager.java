@@ -11,13 +11,7 @@ import es.uco.pw.data.dao.interest.DAOInterest;
 
 public class ContactManager {
 
-    //aqui hacer el menu y no olvidar realizar un singleton (done)
-
-    //funcion de insercion (falta por arreglar el tema de la sql date)
-    //funcion de borrado (done)
-    //funcion de actualizacion 
-    //funcion de filtrado
-    //funcion de imprimir contactos
+    //introducir la contraseña en todos los sitios que sea necesario de esta clase y de las demás
     
     // Singleton declaration
     private static ContactManager instance = null;
@@ -65,6 +59,7 @@ public class ContactManager {
         System.out.println("3. Update contact");
         System.out.println("4. Consult contacts");
         System.out.println("5. Show all contacts");
+        System.out.println("6. Change the password of a contact");
         System.out.println("0. Exit the menu");
         System.out.println("=====================================");
         System.out.println("Your option: ");
@@ -101,6 +96,10 @@ public class ContactManager {
                     System.out.println("Type the email of the contact below:");
                     buffer = in.next();
                     aux_contact.setEmail(buffer);
+
+                    System.out.println("Type the password of the contact below:");
+                    buffer = in.next();
+                    aux_contact.setPassword(buffer);
 
                     if(!checkExistence(aux_contact)){
 
@@ -152,15 +151,26 @@ public class ContactManager {
                         buffer = in.next();
                         aux_contact.setEmail(buffer);
 
+                        System.out.println("Type the password of the contact: ");
+                        buffer = in.next();
+
                         if(!checkExistence(aux_contact)){
 
                             System.out.println("There's no email like this in the database");
                         }
 
                         else{
-                            
-                            DAOContact.Delete(aux_contact);
-                            DAOInterest.Delete(aux_contact);
+
+                            if(DAOContact.QueryByEmail(aux_contact).getPassword().equals(buffer)){
+                                
+                                DAOContact.Delete(aux_contact);
+                                DAOInterest.Delete(aux_contact);
+
+                            }
+
+                            else{
+                                System.out.println("Incorrect password.");
+                            }
                         }
                     }
 
@@ -184,9 +194,15 @@ public class ContactManager {
 
                             System.out.println("There's no email like this in the database");
                         }
+                        
 
                         else{
 
+                            System.out.println("Type the password of the contact: ");
+                            buffer = in.next();
+                            if(DAOContact.QueryByEmail(aux_contact).getPassword().equals(buffer)){
+
+                            
                             try{
 
                                 in = new Scanner (System.in);
@@ -212,7 +228,7 @@ public class ContactManager {
 
                                 in = new Scanner (System.in);
 
-                               buffer = in.nextLine();
+                                buffer = in.nextLine();
                                 StringTokenizer interests = new StringTokenizer(buffer.replace(" ", ""), ",");
                                 ArrayList <String> token_interests = new ArrayList <String>();
 
@@ -230,15 +246,20 @@ public class ContactManager {
                                     }
                                 }
 
-                                DAOContact.Update(aux_contact);
                                 DAOInterest.Delete(aux_contact);
+                                DAOContact.Update(aux_contact);
                                 DAOInterest.Save(aux_contact);
 
                             }catch(ParseException e){
                                     System.out.println("Not a valid format for the date, try with this format: dd/MM/yyyy.");
+                                    }
+
+                            }else{
+                                System.out.println("Incorrect password.");
                             }
                         }
                     }
+
 
                     break;
 
@@ -272,8 +293,45 @@ public class ContactManager {
 
                     break;
 
+
+                case 6:
+                    in = new Scanner (System.in);
+                    System.out.println("Type the email of the contact: ");
+                    buffer = in.next();
+                    aux_contact.setEmail(buffer);
+
+                    if(!checkExistence(aux_contact)){
+
+                        System.out.println("There's no email like this in the database");
+                    }
+
+
+                    else{
+
+                        System.out.println("Type the old password of the contact: ");
+                        buffer = in.next();
+                        if(DAOContact.QueryByEmail(aux_contact).getPassword().equals(buffer)){
+
+                            System.out.println("Type the new password of the contact: ");
+                            buffer = in.next();
+                            aux_contact.setPassword(buffer);
+
+                            DAOContact.UpdatePassword(aux_contact);
+
+                            System.out.println("Password changed successfully.");
+
+                            }
+
+                            else{
+                                System.out.println("Incorrect password.");
+                            }
+                        }
+
+
+                        break;
+
                 default:
-                    System.out.println("Not a valid option. Try again. [0-5]");
+                    System.out.println("Not a valid option. Try again. [0-6]");
             }
 
         }

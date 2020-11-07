@@ -24,6 +24,7 @@ public class Contact {
 	private String surname;
 	private Date birthday;
 	private String email;
+	private String password;
 	ArrayList <String> interests = new ArrayList <String>();
 
 	/**
@@ -41,12 +42,13 @@ public class Contact {
 	 * */
 
 
-	public Contact(String name, String surname, Date birthday, String email) {
+	public Contact(String name, String surname, Date birthday, String email, String password) {
 
 		this.name = name;
 		this.surname = surname;
 		this.birthday = birthday;
 		this.email = email;
+		this.password = password;
 	}
 
 
@@ -60,12 +62,13 @@ public class Contact {
 	 * @param interests A list with the interests of a contact
 	 * */
 
-	public Contact(String name, String surname, Date birthday, String email, ArrayList <String> interests) {
+	public Contact(String name, String surname, Date birthday, String email, String password, ArrayList <String> interests) {
 
 		this.name = name;
 		this.surname = surname;
 		this.birthday = birthday;
 		this.email = email;
+		this.password = password;
 		this.interests = interests;
 	}
 
@@ -125,6 +128,16 @@ public class Contact {
 	public String getEmail() {return email;}
 
 
+
+	/**
+	 * Returns the password of a contact
+	 *
+	 * @return Password of the contact
+	 * */
+
+	public String getPassword(){return password;}
+
+
 	/**
 	 * Returns the list of interests of a contact
 	 *
@@ -181,6 +194,16 @@ public class Contact {
 
 
 	public void setEmail(String email) {this.email = email;}
+
+
+	/**
+	 * Sets the password of a contact
+	 *
+	 * @param email Password of the contact
+	 * */
+
+
+	public void setPassword(String password){this.password = password;}
 
 	/**
 	 * Sets the list of interests of a contact

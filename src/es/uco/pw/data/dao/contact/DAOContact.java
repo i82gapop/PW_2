@@ -26,6 +26,7 @@ public class DAOContact extends ConnectionDB{
 			ps.setString(2,contact.getName());
 			ps.setString(3,contact.getSurname());
 			ps.setDate(4,contact.getBirthday());
+			ps.setString(5, contact.getPassword());
 			
 			status = ps.executeUpdate();
 	
@@ -57,6 +58,30 @@ public class DAOContact extends ConnectionDB{
 		
 		return status;
 	}
+
+	public static int UpdatePassword(Contact contact){
+		
+		int status=0;
+		
+		try{
+			Connection con=getConnection();
+			
+			Properties sql_properties = new Properties();
+			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
+			sql_properties.load(sql_properties_file);
+			String statement = sql_properties.getProperty("UpdatePassword");
+			
+			PreparedStatement ps=con.prepareStatement(statement);
+			ps.setString(1,contact.getPassword());
+			ps.setString(2,contact.getEmail());
+			status=ps.executeUpdate();
+			
+		}catch(Exception e){System.out.println(e);}
+		
+		return status;
+	}
+
+
 	
 	public static int Delete(Contact contact){
 		
@@ -99,7 +124,7 @@ public class DAOContact extends ConnectionDB{
 		    
 		    while (rs.next()) {
 		    	
-		    	aux = new Contact(rs.getString("Name"), rs.getString("Surname"), rs.getDate("Birthday"), rs.getString("Email"));
+		    	aux = new Contact(rs.getString("Name"), rs.getString("Surname"), rs.getDate("Birthday"), rs.getString("Email"), rs.getString("Password"));
 
 				resul.add(aux);
 		    }
@@ -134,7 +159,7 @@ public class DAOContact extends ConnectionDB{
 		    
 		    while (rs.next()) {
 		    	
-		    	resul = new Contact(rs.getString("Name"), rs.getString("Surname"), rs.getDate("Birthday"), rs.getString("Email"));
+		    	resul = new Contact(rs.getString("Name"), rs.getString("Surname"), rs.getDate("Birthday"), rs.getString("Email"), rs.getString("Password"));
 		    }
 		   
 		    if (stmt != null) {
@@ -168,7 +193,7 @@ public class DAOContact extends ConnectionDB{
 		    
 		    while (rs.next()) {
 		    	
-		    	aux = new Contact(rs.getString("Name"), rs.getString("Surname"), null, rs.getString("Email"));
+		    	aux = new Contact(rs.getString("Name"), rs.getString("Surname"), rs.getDate("Birthday"), rs.getString("Email"), rs.getString("Password"));
 		    	
 				resul.add(aux);
 		    }
@@ -204,7 +229,7 @@ public class DAOContact extends ConnectionDB{
 		    
 		    while (rs.next()) {
 		    	
-		    	aux = new Contact(rs.getString("Name"), rs.getString("Surname"), null, rs.getString("Email"));
+		    	aux = new Contact(rs.getString("Name"), rs.getString("Surname"), rs.getDate("Birthday"), rs.getString("Email"), rs.getString("Password"));
 
 				resul.add(aux);
 		    }
@@ -241,7 +266,7 @@ public class DAOContact extends ConnectionDB{
 			
 		    while (rs.next()) {
 
-		    	aux = new Contact(rs.getString("Name"), rs.getString("Surname"), null, rs.getString("Email"));
+		    	aux = new Contact(rs.getString("Name"), rs.getString("Surname"), rs.getDate("Birthday"), rs.getString("Email"), rs.getString("Password"));
 
 				resul.add(aux);
 		    }
@@ -278,7 +303,7 @@ public class DAOContact extends ConnectionDB{
 		    
 		    while (rs.next()) {
 		    	
-				aux = new Contact(rs.getString("Name"), rs.getString("Surname"), rs.getDate("Birthday"), rs.getString("Email"));
+				aux = new Contact(rs.getString("Name"), rs.getString("Surname"), rs.getDate("Birthday"), rs.getString("Email"), rs.getString("Password"));
 				
 				if(aux.getAge() == Age){
 

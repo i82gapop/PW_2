@@ -149,7 +149,7 @@ public class DAOInterest extends ConnectionDB{
                 
                 while (rs.next()) {
 		    	
-                    resul = new Contact(rs.getString("Name"), rs.getString("Surname"), rs.getDate("Birthday"), rs.getString("Email"));
+                    resul = new Contact(rs.getString("Name"), rs.getString("Surname"), rs.getDate("Birthday"), rs.getString("Email"), rs.getString("Password"));
                     
                     if(contacts.isEmpty()){
 
