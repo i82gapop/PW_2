@@ -1,7 +1,6 @@
 package es.uco.pw.business.post;
 
-import java.text.SimpleDateFormat;
-import java.sql.Date;
+import java.util.ArrayList;
 import es.uco.pw.business.contact.Contact;
 
     /**
@@ -12,32 +11,36 @@ import es.uco.pw.business.contact.Contact;
      * @version 2.0
      * */
     
-    public abstract class Post{
+    public class Post{
 
     
     //Attributes
-    protected int identifier;
-    protected String title;
-    protected String body;
-    protected Contact owner;
-    protected Date publication;
-    protected Status status;
-    protected Type type;
+    private int identifier;
+    private String title;
+    private String body;
+    private Contact owner;
+    private java.sql.Timestamp publication;
+    private Status status;
+    private Type type;
+    private ArrayList <String> recipients;
+    private ArrayList <String> interests;
+    java.sql.Timestamp date_start;
+    java.sql.Timestamp date_end;
 
 
     /**
        * Empty (default) constructor
        * */
+
     public Post(){};
 
-
     /**
-       * Parameterized constructor
-       * @param identifier The identifier of the post
-       * @param title The title of the post
-       * @param body The body of the post
-       * @param owner The owner of the post
-       * */
+  	 * Parameterized constructor
+  	 * @param identifier The identifier of the post
+  	 * @param title The title of the post
+  	 * @param body The body of the post
+  	 * @param owner The owner of the post
+  	 * */
 
     public Post(int identifier, String title, String body, Contact owner){
 
@@ -48,19 +51,29 @@ import es.uco.pw.business.contact.Contact;
     }
 
 
-    /**
-       * Returns the type of a post
-       *
-       * @return Type of the post
-          * */
-    public Type getType(){return type;}
-
+    
     /**
      * Returns the id of a post
      *
      * @return ID of the post
      * */
-    public int getIdentifier() {return identifier;}
+
+    public int getIdentifier() {
+        return identifier;
+    }
+
+
+    /**
+  	 * Sets the id of a post
+  	 *
+  	 * @param identifier id of the post
+  	 * */
+
+
+
+    public void setIdentifier(int identifier) {
+        this.identifier = identifier;
+    }
 
     /**
      * Returns the title of a post
@@ -68,110 +81,11 @@ import es.uco.pw.business.contact.Contact;
      * @return Title of the post
      * */
 
-
-    public String getTitle() {return title;}
-
-    /**
-     * Returns the body of a post
-     *
-     * @return Body of the post
-     * */
-
-
-    public String getBody() {return body;}
-
-
-    /**
-     * Returns the owner of a post
-     *
-     * @return Owner of the post
-     * */
-
-
-    public Contact getOwner() {return owner;}
-
-
-    /**
-     * Returns the date of publication of a post
-     *
-     * @return Date of publication of the post
-     * */
-
-
-
-    public Date getPublication() {return publication;}
-
-    /**
-     * Returns the status of a post
-     *
-     * @return Status of the post
-     * */
-
-
-    public Status getStatus() {return status;}
-
-    /**
-     * Auxiliar function to see the status as a string
-     *
-     * */
-
-    public String getStatusString(){
-
-        return status.name();
+    public String getTitle() {
+        return title;
     }
 
 
-    /**
-     * Auxiliar function to see the type as a string
-     *
-     * */
-    public String getTypeString(){
-
-        return type.name();
-    }
-
-
-    /**
-     * Auxiliar function to see the date of publication as a string
-     *
-     * */
-    public String getPublicationString(){
-
-        SimpleDateFormat date_format = new SimpleDateFormat("HH:mm/dd-MM-yyyy");
-
-        if(publication!=null){
-
-            return date_format.format(publication);
-        }
-
-        else{
-
-            return null;
-        }
-    }
-
-    public String getPublicationStringNoHour(){
-
-        SimpleDateFormat date_format = new SimpleDateFormat("dd-MM-yyyy");
-
-        if(publication!=null){
-
-            return date_format.format(publication);
-        }
-
-        else{
-
-            return null;
-        }
-    }
-    
-
-    /**
-       * Sets the id of a post
-       *
-       * @param identifier id of the post
-       * */
-    public void setIdentifier(int identifier){this.identifier = identifier;}
 
     /**
      * Sets the title of a post
@@ -180,7 +94,22 @@ import es.uco.pw.business.contact.Contact;
      * */
 
 
-    public void setTitle(String title){this.title = title;}
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+
+    /**
+     * Returns the body of a post
+     *
+     * @return Body of the post
+     * */
+
+
+    public String getBody() {
+        return body;
+    }
+
 
     /**
      * Sets the body of a post
@@ -188,25 +117,70 @@ import es.uco.pw.business.contact.Contact;
      * @param body body of the post
      * */
 
-    public void setBody(String body){this.body = body;}
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
 
     /**
-     * Sets the owner of a post
+     * Returns the owner of a post
      *
-     * @param owner owner of the post
+     * @return Owner of the post
+     * */
+
+    public Contact getOwner() {
+        return owner;
+    }
+
+    /**
+    * Sets the owner of a post
+    *
+    * @param owner owner of the post
+    * */
+
+
+    public void setOwner(Contact owner) {
+        this.owner = owner;
+    }
+
+
+    /**
+     * Returns the date of publication of a post
+     *
+     * @return Date of publication of the post
+     * */
+
+    public java.sql.Timestamp getPublication() {
+        return publication;
+    }
+
+
+    /**
+    * Sets the date of publication of a post
+    *
+    * @param date date of publication of the post
+    * */
+
+
+
+    public void setPublication(java.sql.Timestamp publication) {
+        this.publication = publication;
+    }
+
+
+    /**
+     * Returns the status of a post
+     *
+     * @return Status of the post
      * */
 
 
-    public void setOwner(Contact owner){this.owner = owner;}
 
-    /**
-     * Sets the date of publication of a post
-     *
-     * @param date date of publication of the post
-     * */
+    public Status getStatus() {
+        return status;
+    }
 
-
-    public void setPublication(Date date){this.publication = date;}
 
     /**
      * Sets the status of a post
@@ -215,7 +189,19 @@ import es.uco.pw.business.contact.Contact;
      * */
 
 
-    public void setStatus(Status status) {this.status = status;}
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    /**
+  	 * Returns the type of a post
+  	 *
+  	 * @return Type of the post
+  	 * */
+
+    public Type getType() {
+        return type;
+    }
 
     /**
      * Sets the type of a post
@@ -224,16 +210,133 @@ import es.uco.pw.business.contact.Contact;
      * */
 
 
+    public void setType(Type type) {
+        this.type = type;
+    }
 
-    public void setType(Type type){this.type = type;}
+    /**
+  	 * Returns the recipients of an Individualized post
+  	 *
+  	 * @return Recipients of the Individualized post
+  	 * */
 
+
+
+    public ArrayList<String> getRecipients() {
+        return recipients;
+    }
+
+
+    /**
+     * Sets the recipients of an Individualized post
+     *
+     * @param recipients recipients of the Individualized post
+     * */
+
+
+
+    public void setRecipients(ArrayList<String> recipients) {
+        this.recipients = recipients;
+    }
+
+    /**
+  	 * Returns the interests of a Thematic post
+  	 *
+  	 * @return interests of the Thematic post
+  	 * */
+
+
+    public ArrayList<String> getInterests() {
+        return interests;
+    }
+
+
+    /**
+     * Sets the interests of an Thematic post
+     *
+     * @param interests interests of the Thematic post
+     * */
+
+    public void setInterests(ArrayList<String> interests) {
+        this.interests = interests;
+    }
+
+
+    /**
+  	 * Returns the starting date of an flash post
+  	 *
+  	 * @return starting date of the flash post
+  	 * */
+
+
+    public java.sql.Timestamp getDate_start() {
+        return date_start;
+    }
+
+    /**
+     * Sets the starting date of a flash post
+     *
+     * @param date_start starting date of the flash post
+     * */
+
+
+
+    public void setDate_start(java.sql.Timestamp date_start) {
+        this.date_start = date_start;
+    }
+
+
+
+    /**
+     * Returns the ending date of an flash post
+     *
+     * @return ending date of the flash post
+     * */
+
+
+
+    public java.sql.Timestamp getDate_end() {
+        return date_end;
+    }
+
+
+    /**
+     * Sets the ending date of a flash post
+     *
+     * @param date_end ending date of the flash post
+     * */
+
+
+
+    public void setDate_end(java.sql.Timestamp date_end) {
+        this.date_end = date_end;
+    }
 
     /**
        * Auxiliar functions to see the info of a post
        *
        * */
-    public String toString(){
 
-        return "Post {ID: " + identifier + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "}";
+      public String toString(){
+
+        if(this.type.equals(Type.GENERAL)){
+
+            return "Post {ID: " + identifier + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "}";
+        }
+
+        else if(this.type.equals(Type.INDIVIDUALIZED)){
+
+            return "Post {ID: " + identifier + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "; Recipients: " + recipients + "}";
+        }
+
+        else if(this.type.equals(Type.THEMATIC)){
+
+            return "Post {ID: " + identifier + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "; Interests: " + interests + "}";
+        }
+
+        else{
+
+            return "Post {ID: " + identifier + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "; Start Date: " + date_start + "; End Date: " + date_end + "}";
+        }
     }
 }

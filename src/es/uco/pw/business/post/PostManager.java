@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 
 import es.uco.pw.business.contact.Contact;
-import es.uco.pw.business.contact.ContactManager;
+//import es.uco.pw.business.contact.ContactManager;
 import es.uco.pw.data.dao.contact.DAOContact;
 import es.uco.pw.data.dao.interest.DAOInterest;
 import es.uco.pw.data.dao.post.DAOPost;
@@ -18,7 +18,7 @@ public class PostManager {
     private static PostManager instance = null;
     SimpleDateFormat format = new SimpleDateFormat("HH:mm/dd-MM-yyyy");
     private Scanner in = new Scanner (System.in);
-    private ContactManager contact_manager = ContactManager.getInstance();
+    //private ContactManager contact_manager = ContactManager.getInstance();
 
     private PostManager(){}
 
@@ -36,25 +36,26 @@ public class PostManager {
 
     public void Menu() throws ParseException{
 
-        Contact aux_contact = new Contact();
+        Contact user = new Contact();
+        int id;
         String buffer;
 
         System.out.println("ADVERTISEMENTS MANAGEMENT SYSTEM");
         System.out.println("Type your email to login in: ");
         buffer = in.next();
-        aux_contact.setEmail(buffer);
+        user.setEmail(buffer);
         System.out.println("Type the password: ");
         buffer = in.next();
-        aux_contact.setPassword(buffer);
+        user.setPassword(buffer);
 
 
         
-        if((aux_contact = DAOContact.QueryByEmail(aux_contact)) != null){
+        if((user = DAOContact.QueryByEmail(user)) != null){
 
-            if(aux_contact.getPassword().equals(buffer)){
+            if(user.getPassword().equals(buffer)){
                 
                 String buff_title, buff_body;
-                java.sql.Date buff_date_start, buff_date_end;
+                java.sql.Timestamp buff_date_start, buff_date_end;
                 //ArrayList <String> buff_interests = new ArrayList<String>();
                 Contact capsule = new Contact();
 
@@ -79,10 +80,8 @@ public class PostManager {
 
                     option = in.nextInt();
 
-                    
-                    Post_Creator_Board aux_post_creator = new Post_Creator_Board();
                     Post aux_post;
-                    
+
                     switch(option){
 
                         case 0:
@@ -125,7 +124,7 @@ public class PostManager {
                                     System.out.println("Type the body of the post: ");
                                     buff_body = in.nextLine();
 
-                                    aux_post = aux_post_creator.getPost(0, Type.GENERAL, buff_title, buff_body, aux_contact, null, null, null, null);
+                                    aux_post = new Post(0, buff_title, buff_body, user);
                                     aux_post.setType(Type.GENERAL);
 
                                     DAOPost.Save(aux_post);
@@ -167,7 +166,8 @@ public class PostManager {
                                         }
                                     }
 
-                                    aux_post = aux_post_creator.getPost(0, Type.THEMATIC, buff_title, buff_body, aux_contact, null, null, null, capsule.getInterests());
+                                    aux_post = new Post(0, buff_title, buff_body, user);
+                                    aux_post.setInterests(capsule.getInterests());
                                     aux_post.setType(Type.THEMATIC);
 
                                     DAOPost.Save(aux_post);
@@ -211,7 +211,8 @@ public class PostManager {
                                         }
                                     }
 
-                                    aux_post = aux_post_creator.getPost(0, Type.INDIVIDUALIZED, buff_title, buff_body, aux_contact, null, null, buff_recipients, null);
+                                    aux_post = new Post(0, buff_title, buff_body, user);
+                                    aux_post.setRecipients(buff_recipients);
                                     aux_post.setType(Type.INDIVIDUALIZED);
 
                                     DAOPost.Save(aux_post);
@@ -235,18 +236,16 @@ public class PostManager {
                                     System.out.println("When do you want to post it?: (format: HH:mm/dd-MM-yyyy)");
                                     buffer = in.nextLine();
                                     date = format.parse(buffer); 
-                                    buff_date_start = new java.sql.Date(date.getTime());
+                                    buff_date_start = new java.sql.Timestamp(date.getTime());
 
                                     System.out.println("When do you want to archive it?: (format: HH:mm/dd-MM-yyyy)");
                                     buffer = in.nextLine();
                                     date = format.parse(buffer); 
-                                    buff_date_end = new java.sql.Date(date.getTime());
+                                    buff_date_end = new java.sql.Timestamp(date.getTime());
 
-                                    java.sql.Timestamp date_start_timestamp = new java.sql.Timestamp(date.getTime());
-
-                                    System.out.println("Timestamp: " + date_start_timestamp);
-
-                                    aux_post = aux_post_creator.getPost(0, Type.FLASH, buff_title, buff_body, aux_contact, buff_date_start, buff_date_end, null, null);
+                                    aux_post = new Post(0, buff_title, buff_body, user);
+                                    aux_post.setDate_start(buff_date_start);
+                                    aux_post.setDate_end(buff_date_end);
                                     aux_post.setType(Type.FLASH);
 
                                     DAOPost.Save(aux_post);
@@ -260,14 +259,71 @@ public class PostManager {
                             break;
 
                         case 2:
-                            
+
+                            in = new Scanner (System.in);
+                            System.out.println("Type the id of the post to post it: ");
+                            id = in.nextInt();
+
+                            aux_post = new Post();
+
+                            aux_post.setIdentifier(id);
+
+                            if(DAOPost.QueryByID(aux_post) != null) {
+
+                                if(DAOPost.QueryByID(aux_post).getOwner().getEmail().equals(user.getEmail())){
+
+                                    aux_post = DAOPost.QueryByID(aux_post);
+                                    aux_post.setStatus(Status.POSTED);
+
+                                    DAOPost.UpdateStatus(aux_post);
+                                }
+
+                                else{
+                                    System.out.println("You are not the owner of this post. ");
+                                }
+                            }
+
+                            else {
+                                System.out.println("That ID post doesn't exist. ");
+                            }
+                                
                             break;
     
                         case 3:
                             
+                            
+
+
                             break;
     
                         case 4:
+
+                            in = new Scanner (System.in);
+                                System.out.println("Type the id of the post to archive it: ");
+                                id = in.nextInt();
+
+                                aux_post = new Post();
+
+                                aux_post.setIdentifier(id);
+
+                                if(DAOPost.QueryByID(aux_post) != null) {
+
+                                    if(DAOPost.QueryByID(aux_post).getOwner().getEmail().equals(user.getEmail())){
+
+                                        aux_post = DAOPost.QueryByID(aux_post);
+                                        aux_post.setStatus(Status.ARCHIVED);
+
+                                        DAOPost.UpdateStatus(aux_post);
+                                    }
+
+                                    else{
+                                        System.out.println("You are not the owner of this post. ");
+                                    }
+                                }
+
+                                else {
+                                    System.out.println("That ID post doesn't exist. ");
+                                }
     
                             break;
     
