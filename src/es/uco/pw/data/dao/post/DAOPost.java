@@ -1,8 +1,9 @@
 package es.uco.pw.data.dao.post;
 
 import java.io.FileInputStream;
-import java.security.Principal;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import es.uco.pw.business.contact.Contact;
@@ -10,8 +11,33 @@ import es.uco.pw.business.post.*;
 import es.uco.pw.data.dao.common.ConnectionDB;
 import es.uco.pw.data.dao.contact.DAOContact;
 
+
+
+
+
+/**
+ * A class to represent the DAO post and its functions
+ * @author Pedro Pablo Garcia Pozo
+ * @author Ruben Borrego Canovaca
+ * @since 4-11-2020
+ * @version 2.0
+ *
+ * */
+
+
+
+
+
 public class DAOPost extends ConnectionDB{
 
+
+    /**
+    * Function that saves a given post to the database Posts
+    *
+    * @param post Post to add
+    * @return integer value, it represents the status of the action
+    *
+    **/
 
 	public static int Save(Post post){
 		
@@ -150,6 +176,16 @@ public class DAOPost extends ConnectionDB{
 		return status;
     }    
 
+
+
+    /**
+     * Function that saves a given post to the database IP and CP
+     *
+     * @param post Post to add
+     * @return integer value, it represents the status of the action
+     *
+     **/
+
     public static int SaveBis(Post post){
 		
         int status=0;
@@ -197,7 +233,16 @@ public class DAOPost extends ConnectionDB{
 		return status;
     }
 
-    public static int UpdateStatus(Post post){//poner mensajitos de retroalimentacion
+
+    /**
+     * Function that updates the status of a given post in the database
+     *
+     * @param post Post to update
+     * @return integer value, it represents the status of the action
+     *
+     **/
+
+    public static int UpdateStatus(Post post){
 		
         int status=0;
 		
@@ -211,11 +256,11 @@ public class DAOPost extends ConnectionDB{
 
             Status post_status = QueryByID(post).getStatus();
 
-            if(!post_status.equals(Status.ARCHIVED)){//no esta archivado por lo que si se puede cambiar el estado
+            if(!post_status.equals(Status.ARCHIVED) && !post_status.equals(post.getStatus())){//no esta archivado por lo que si se puede cambiar el estado
 
-                if(post.getType().equals(Type.FLASH)){//si es flash
+                if(post.getType().equals(Type.FLASH)){//if its flash
 
-                    if(post.getStatus().equals(Status.POSTED)){//si quieres postearlo
+                    if(post.getStatus().equals(Status.POSTED)){//if you want to post it
     
                         if(post.getDate_start().after(new Timestamp(System.currentTimeMillis()))){//si todavia no ha llegado la fecha
     
@@ -226,7 +271,7 @@ public class DAOPost extends ConnectionDB{
                             status=ps.executeUpdate();
                         }
     
-                        else{//si ha llegado la fecha
+                        else{//if start date has reached out
     
                             statement = sql_properties.getProperty("UpdateStatusPublication");
     
@@ -240,7 +285,7 @@ public class DAOPost extends ConnectionDB{
     
                     }
     
-                    else{//si no quieres postearlo
+                    else{//if you don't want to post it
     
                         PreparedStatement ps=con.prepareStatement(statement);
                         ps.setString(1,post.getStatus().name());
@@ -250,9 +295,9 @@ public class DAOPost extends ConnectionDB{
                     }
                 }
     
-                else{//si no es flash
+                else{//if it's not flash
     
-                    if(post.getStatus().equals(Status.POSTED)){//si quieres postearlo
+                    if(post.getStatus().equals(Status.POSTED)){//if you want to post it
     
                         statement = sql_properties.getProperty("UpdateStatusPublication");
     
@@ -264,7 +309,7 @@ public class DAOPost extends ConnectionDB{
                         status=ps.executeUpdate();
                     }
     
-                    else{//si no quieres postearlo
+                    else{//if you don't want to post it
     
                         PreparedStatement ps=con.prepareStatement(statement);
                         ps.setString(1,post.getStatus().name());
@@ -276,8 +321,8 @@ public class DAOPost extends ConnectionDB{
             }
 
             else{
-
-                System.out.println("You cant change the status of the post because its already archived.");
+                
+                System.out.println("You can't change the status of the post because it's already archived or has the same status");
             }            
 
 		}catch(Exception e){System.out.println(e);}
@@ -285,8 +330,15 @@ public class DAOPost extends ConnectionDB{
 		return status;
     }
     
-    
-    
+
+    /**
+     * Function that queries a post in the database from a given post with the ID to search for
+     *
+     * @param post Post to query
+     * @return Post, the post with the full information
+     *
+     **/
+
     public static Post QueryByID(Post post){
         
         Statement stmt = null;
@@ -328,5 +380,362 @@ public class DAOPost extends ConnectionDB{
         } 
 
         return resul;
-    }    
+    }
+    
+
+    /**
+     * Function that queries a list of posts in the database from a given date of publication to search for
+     *
+     * @param post Post to query
+     * @return Post, the post with the full information
+     *
+     **/
+
+    public static ArrayList <Post> QueryByDate(Post post){
+        
+        Statement stmt = null;
+        ArrayList <Post> results = new ArrayList<Post>();
+        Post resul = null;
+        Contact capsule = new Contact();
+
+        try {
+            
+            Connection con=getConnection();
+            
+            Properties sql_properties = new Properties();
+            FileInputStream sql_properties_file = new FileInputStream("sql.properties");
+            sql_properties.load(sql_properties_file);
+            String statement = sql_properties.getProperty("QueryByDate");
+            
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String date = format.format(post.getPublication());
+
+
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(statement + "'" + date + "'");
+            
+            while (rs.next()) {
+
+                capsule.setEmail(rs.getString("Owner"));
+                
+                resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), DAOContact.QueryByEmail(capsule)); 
+
+                resul.setType(Type.valueOf(rs.getString("Type")));
+                resul.setStatus(Status.valueOf(rs.getString("Status")));
+                resul.setPublication(rs.getTimestamp("Publication"));
+                resul.setDate_start(rs.getTimestamp("Start"));
+                resul.setDate_end(rs.getTimestamp("End"));
+
+                if(resul.getType().equals(Type.INDIVIDUALIZED)){
+
+                    ArrayList <String> recipients = new ArrayList <String>();
+
+                    recipients = SelectRecipients(resul);
+                    resul.setRecipients(recipients);
+                }
+
+                else if(resul.getType().equals(Type.THEMATIC)){
+
+                    ArrayList <String> interests = new ArrayList <String>();
+
+                    interests = SelectInterests(resul);
+                    resul.setInterests(interests);                    
+                }
+
+                results.add(resul);
+            }
+           
+            if (stmt != null) {
+                
+                stmt.close();
+            }
+                
+        } catch (Exception e) {
+            System.out.println(e);
+        } 
+
+        return results;
+    }
+
+    public static ArrayList <Post> QueryByOwner(Post post){
+        
+        Statement stmt = null;
+        ArrayList <Post> results = new ArrayList<Post>();
+        Post resul = null;
+        Contact capsule = new Contact();
+
+        try {
+            
+            Connection con=getConnection();
+            
+            Properties sql_properties = new Properties();
+            FileInputStream sql_properties_file = new FileInputStream("sql.properties");
+            sql_properties.load(sql_properties_file);
+            String statement = sql_properties.getProperty("QueryByOwner");
+            
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(statement + post.getIdentifier());
+            
+            while (rs.next()) {
+
+                capsule.setEmail(rs.getString("Owner"));
+                
+                resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), DAOContact.QueryByEmail(capsule)); 
+
+                resul.setType(Type.valueOf(rs.getString("Type")));
+                resul.setStatus(Status.valueOf(rs.getString("Status")));
+                resul.setPublication(rs.getTimestamp("Publication"));
+                resul.setDate_start(rs.getTimestamp("Start"));
+                resul.setDate_end(rs.getTimestamp("End"));
+
+                if(resul.getType().equals(Type.INDIVIDUALIZED)){
+
+                    ArrayList <String> recipients = new ArrayList <String>();
+
+                    recipients = SelectRecipients(resul);
+                    resul.setRecipients(recipients);
+                }
+
+                else if(resul.getType().equals(Type.THEMATIC)){
+
+                    ArrayList <String> interests = new ArrayList <String>();
+
+                    interests = SelectInterests(resul);
+                    resul.setInterests(interests);
+                }
+
+                results.add(resul);
+            }
+           
+            if (stmt != null) {
+                
+                stmt.close();
+            }
+                
+        } catch (Exception e) {
+            System.out.println(e);
+        } 
+
+        return results;
+    }
+
+    public static ArrayList <String> SelectRecipients(Post post){
+        
+        Statement stmt = null;
+        ArrayList <String> recipients = new ArrayList<String>();
+
+        try {
+            
+            Connection con=getConnection();
+            
+            Properties sql_properties = new Properties();
+            FileInputStream sql_properties_file = new FileInputStream("sql.properties");
+            sql_properties.load(sql_properties_file);
+            String statement = sql_properties.getProperty("SelectRecipients");
+            
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(statement + post.getIdentifier());
+            
+            while (rs.next()) {
+
+                recipients.add(rs.getString("Email"));
+            }
+           
+            if (stmt != null) {
+                
+                stmt.close();
+            }
+                
+        } catch (Exception e) {
+            System.out.println(e);
+        } 
+
+        return recipients;
+    }
+    
+    public static ArrayList <String> SelectInterests(Post post){
+        
+        Statement stmt = null;
+        ArrayList <String> recipients = new ArrayList<String>();
+
+        try {
+            
+            Connection con=getConnection();
+            
+            Properties sql_properties = new Properties();
+            FileInputStream sql_properties_file = new FileInputStream("sql.properties");
+            sql_properties.load(sql_properties_file);
+            String statement = sql_properties.getProperty("SelectInterests");
+            
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(statement + post.getIdentifier());
+            
+            while (rs.next()) {
+
+                recipients.add(rs.getString("Interest"));
+            }
+           
+            if (stmt != null) {
+                
+                stmt.close();
+            }
+                
+        } catch (Exception e) {
+            System.out.println(e);
+        } 
+
+        return recipients;
+    }
+
+
+
+
+    /**
+     * Function that deletes a given post from the database IP
+     *
+     * @param post Post to delete
+     * @return integer value, it represents the status of the action
+     *
+     **/
+
+    public static int DeleteInterests(Post post){
+		
+		int status=0;
+		
+		try{
+			Connection con=getConnection();
+			
+			Properties sql_properties = new Properties();
+			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
+			sql_properties.load(sql_properties_file);
+			String statement = sql_properties.getProperty("DeletePostInterests");
+			
+			PreparedStatement ps=con.prepareStatement(statement);
+			ps.setInt(1,post.getIdentifier());
+			status=ps.executeUpdate();
+			
+		}catch(Exception e){System.out.println(e);}
+		
+		return status;
+    }
+
+
+    /**
+     * Function that deletes a given post from the database CP
+     *
+     * @param post Post to delete
+     * @return integer value, it represents the status of the action
+     *
+     **/
+
+    public static int DeleteRecipients(Post post){
+		
+		int status=0;
+		
+		try{
+			Connection con=getConnection();
+			
+			Properties sql_properties = new Properties();
+			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
+			sql_properties.load(sql_properties_file);
+			String statement = sql_properties.getProperty("DeletePostRecipients");
+			
+			PreparedStatement ps=con.prepareStatement(statement);
+			ps.setInt(1,post.getIdentifier());
+			status=ps.executeUpdate();
+			
+		}catch(Exception e){System.out.println(e);}
+		
+		return status;
+    }
+
+
+
+    /**
+     * Function that updates a given post in the database
+     *
+     * @param post Post to update
+     * @return integer value, it represents the status of the action
+     *
+     **/
+
+    public static int Update(Post post){
+		
+        int status=0;
+        
+		try{
+            
+			Connection con=getConnection();
+			
+			Properties sql_properties = new Properties();
+			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
+            sql_properties.load(sql_properties_file);
+            
+
+            if(post.getType().equals(Type.GENERAL)){
+
+                String statement = sql_properties.getProperty("UpdateGeneralPost");
+
+                PreparedStatement ps=con.prepareStatement(statement);
+
+                ps.setString(1,post.getTitle());
+                ps.setString(2,post.getBody());
+                ps.setInt(3, post.getIdentifier());
+
+                status = ps.executeUpdate();
+            }
+    
+            else if(post.getType().equals(Type.INDIVIDUALIZED)){
+    
+                String statement = sql_properties.getProperty("UpdateIndividualizedPost");
+
+                PreparedStatement ps=con.prepareStatement(statement);
+                ps.setString(1,post.getTitle());
+                ps.setString(2,post.getBody());
+                ps.setInt(3, post.getIdentifier());
+
+                status = ps.executeUpdate();
+                DeleteRecipients(post);
+                SaveBis(post);
+
+            }
+    
+            else if(post.getType().equals(Type.THEMATIC)){
+    
+                String statement = sql_properties.getProperty("UpdateThematicPost");
+
+                PreparedStatement ps=con.prepareStatement(statement);
+                ps.setString(1,post.getTitle());
+                ps.setString(2,post.getBody());
+                ps.setInt(3, post.getIdentifier());
+
+                status = ps.executeUpdate();
+                DeleteInterests(post);
+                SaveBis(post);
+
+            }
+    
+            else{
+                
+                String statement = sql_properties.getProperty("UpdateFlashPost");
+
+                PreparedStatement ps=con.prepareStatement(statement);
+
+                ps.setString(1,post.getTitle());
+                ps.setString(2,post.getBody());
+                ps.setTimestamp(3, post.getDate_start());
+                ps.setTimestamp(4, post.getDate_end());
+                ps.setInt(5,post.getIdentifier());
+
+                status = ps.executeUpdate();
+
+            }  
+
+		}catch(Exception e){System.out.println(e);}
+		
+		return status;
+    }
+    
+    
+
 }

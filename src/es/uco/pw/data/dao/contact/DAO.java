@@ -6,7 +6,7 @@ import es.uco.pw.business.contact.ContactManager;
 
 
 /**
- * A class to represent the main of the program
+ * A class to represent the main of the contact manager program
  * @author Pedro Pablo Garcia Pozo
  * @author Ruben Borrego Canovaca
  * @since 4-11-2020
