@@ -55,6 +55,7 @@ public class PostManager {
         int id;
         String buffer;
 
+        System.out.println("Updating flash posts status before entering the program...");
         UpdateFlash();
         
         System.out.println("ADVERTISEMENTS MANAGEMENT SYSTEM");
@@ -78,8 +79,6 @@ public class PostManager {
                 int option = 1;
 
                 while(option != 0){
-
-
 
                     Contact capsule = new Contact();
                     in = new Scanner (System.in);
@@ -564,8 +563,49 @@ public class PostManager {
                             break;
     
                         case 6:
-
                             
+                            ArrayList <Post> res  = new ArrayList<Post>();
+
+                            in = new Scanner (System.in);
+
+                            System.out.println("How you want to order the posts by?");
+                            System.out.println("1. By owner");
+                            System.out.println("2. By date");
+                            System.out.println("0. Cancel");
+                            System.out.println("=====================================");
+                            System.out.println("Your option: ");
+                                
+                            int sub_option_ex;
+                            sub_option_ex = in.nextInt();
+                            
+                            if(sub_option_ex == 1){
+
+                                res = DAOPost.OrderByOwner();
+                                
+                                System.out.println("Showing the posts posted order by owner");
+
+                                for (Post post : res) {
+                                    
+                                    System.out.println(post.toString());
+                                }
+                            }
+
+                            else if(sub_option_ex == 2){
+                                
+                                res = DAOPost.OrderByDate();
+
+                                System.out.println("Showing the posts posted order by owner");
+
+                                for (Post post : res) {
+                                    
+                                    System.out.println(post.toString());
+                                }
+                            }
+
+                            else{
+
+                                System.out.println("Not a valid option. Try again.");
+                            }
     
                             break;
     

@@ -909,4 +909,139 @@ public class DAOPost extends ConnectionDB{
 		return status;
     }
 
+    public static ArrayList <Post> OrderByOwner(){
+        
+        Statement stmt = null;
+        ArrayList <Post> results = new ArrayList<Post>();
+        Post resul = null;
+        Contact capsule = new Contact();
+
+        try {
+            
+            Connection con=getConnection();
+            
+            Properties sql_properties = new Properties();
+            FileInputStream sql_properties_file = new FileInputStream("sql.properties");
+            sql_properties.load(sql_properties_file);
+            String statement = sql_properties.getProperty("OrderByOwner");
+            
+            stmt = con.createStatement();
+
+            ResultSet rs = stmt.executeQuery(statement);
+            
+            while (rs.next()) {
+
+                boolean existence = false;
+
+                capsule.setEmail(rs.getString("Owner"));
+
+                resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), DAOContact.QueryByEmail(capsule)); 
+
+                resul.setType(Type.valueOf(rs.getString("Type")));
+                resul.setStatus(Status.valueOf(rs.getString("Status")));
+                resul.setPublication(rs.getTimestamp("Publication"));
+                resul.setDate_start(rs.getTimestamp("Start"));
+                resul.setDate_end(rs.getTimestamp("End"));
+
+                ArrayList <String> array = new ArrayList <String>();
+
+                if(resul.getType().equals(Type.INDIVIDUALIZED)){
+
+                    array = SelectRecipients(resul);
+                    resul.setRecipients(array);
+                }
+
+                else if(resul.getType().equals(Type.THEMATIC)){
+
+                    array = SelectInterests(resul);
+                    resul.setInterests(array);
+                }
+
+
+                if(!existence){
+
+                    results.add(resul);
+                }
+            }
+            
+
+            if (stmt != null) {
+                
+                stmt.close();
+            }
+                
+        } catch (Exception e) {
+            System.out.println(e);
+        } 
+
+        return results;
+    }
+
+    public static ArrayList <Post> OrderByDate(){
+        
+        Statement stmt = null;
+        ArrayList <Post> results = new ArrayList<Post>();
+        Post resul = null;
+        Contact capsule = new Contact();
+
+        try {
+            
+            Connection con=getConnection();
+            
+            Properties sql_properties = new Properties();
+            FileInputStream sql_properties_file = new FileInputStream("sql.properties");
+            sql_properties.load(sql_properties_file);
+            String statement = sql_properties.getProperty("OrderByDate");
+            
+            stmt = con.createStatement();
+
+            ResultSet rs = stmt.executeQuery(statement);
+            
+            while (rs.next()) {
+
+                boolean existence = false;
+
+                capsule.setEmail(rs.getString("Owner"));
+
+                resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), DAOContact.QueryByEmail(capsule)); 
+
+                resul.setType(Type.valueOf(rs.getString("Type")));
+                resul.setStatus(Status.valueOf(rs.getString("Status")));
+                resul.setPublication(rs.getTimestamp("Publication"));
+                resul.setDate_start(rs.getTimestamp("Start"));
+                resul.setDate_end(rs.getTimestamp("End"));
+
+                ArrayList <String> array = new ArrayList <String>();
+
+                if(resul.getType().equals(Type.INDIVIDUALIZED)){
+
+                    array = SelectRecipients(resul);
+                    resul.setRecipients(array);
+                }
+
+                else if(resul.getType().equals(Type.THEMATIC)){
+
+                    array = SelectInterests(resul);
+                    resul.setInterests(array);
+                }
+
+
+                if(!existence){
+
+                    results.add(resul);
+                }
+            }
+            
+
+            if (stmt != null) {
+                
+                stmt.close();
+            }
+                
+        } catch (Exception e) {
+            System.out.println(e);
+        } 
+
+        return results;
+    }
 }
