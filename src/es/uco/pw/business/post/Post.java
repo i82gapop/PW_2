@@ -321,22 +321,22 @@ import es.uco.pw.business.contact.Contact;
 
         if(this.type.equals(Type.GENERAL)){
 
-            return "Post {ID: " + identifier + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "}";
+            return "Post {ID: " + identifier + "; Status: " + status.name() + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "}";
         }
 
         else if(this.type.equals(Type.INDIVIDUALIZED)){
 
-            return "Post {ID: " + identifier + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "; Recipients: " + recipients + "}";
+            return "Post {ID: " + identifier + "; Status: " + status.name() + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "; Recipients: " + recipients + "}";
         }
 
         else if(this.type.equals(Type.THEMATIC)){
 
-            return "Post {ID: " + identifier + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "; Interests: " + interests + "}";
+            return "Post {ID: " + identifier + "; Status: " + status.name() + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "; Interests: " + interests + "}";
         }
 
         else{
 
-            return "Post {ID: " + identifier + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "; Start Date: " + date_start + "; End Date: " + date_end + "}";
+            return "Post {ID: " + identifier + "; Status: " + status.name() + "; Title: " + title + "; Body: " + body + "; Owner: " + owner.getEmail() + "; Publication: " + publication + "; Start Date: " + date_start + "; End Date: " + date_end + "}";
         }
     }
 }

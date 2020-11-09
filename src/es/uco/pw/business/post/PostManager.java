@@ -55,6 +55,8 @@ public class PostManager {
         int id;
         String buffer;
 
+        UpdateFlash();
+        
         System.out.println("ADVERTISEMENTS MANAGEMENT SYSTEM");
         System.out.println("Type your email to login in: ");
         buffer = in.next();
@@ -76,6 +78,8 @@ public class PostManager {
                 int option = 1;
 
                 while(option != 0){
+
+
 
                     Contact capsule = new Contact();
                     in = new Scanner (System.in);
@@ -560,6 +564,8 @@ public class PostManager {
                             break;
     
                         case 6:
+
+                            
     
                             break;
     
@@ -694,7 +700,7 @@ public class PostManager {
                 in = new Scanner (System.in);
                 aux_post = new Post();
                 
-                System.out.println("Type the owner of the posts to search: ");
+                System.out.println("Type the owner's email of the posts to search: ");
                 search_term = in.next();
 
                 Contact capsule = new Contact();
@@ -702,7 +708,6 @@ public class PostManager {
 
                 aux_post.setOwner(DAOContact.QueryByEmail(capsule));
                 
-
                 if((res = DAOPost.QueryByOwner(aux_post)) != null){
 
                     System.out.println("Showing the results of the search: ");
@@ -724,7 +729,7 @@ public class PostManager {
                 in = new Scanner (System.in);
                 aux_post = new Post();
                 
-                System.out.println("Type the name of the recipient of the posts to search: ");
+                System.out.println("Type the email of the recipient of the posts to search: ");
                 search_term = in.next();
 
                 ArrayList <String> recipients = new ArrayList <String>();
@@ -758,4 +763,17 @@ public class PostManager {
                 System.out.println("Wrong option. Try using a valid option next time (between 0-4).");
             }
     }
+
+    public void UpdateFlash(){
+
+
+        java.sql.Timestamp system_time= new java.sql.Timestamp(System.currentTimeMillis());
+
+        Post aux_post = new Post();
+
+        aux_post.setPublication(system_time);
+
+        DAOPost.UpdateFlashStart(aux_post);
+        DAOPost.UpdateFlashEnd(aux_post);
+    }   
 }

@@ -474,7 +474,7 @@ public class DAOPost extends ConnectionDB{
             String statement = sql_properties.getProperty("QueryByOwner");
             
             stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(statement + post.getIdentifier());
+            ResultSet rs = stmt.executeQuery(statement + "'" + post.getOwner().getEmail() + "'");
             
             while (rs.next()) {
 
@@ -622,6 +622,7 @@ public class DAOPost extends ConnectionDB{
                     resul.setPublication(rs.getTimestamp("Publication"));
                     resul.setDate_start(rs.getTimestamp("Start"));
                     resul.setDate_end(rs.getTimestamp("End"));
+                    resul.setRecipients(SelectRecipients(resul));
 
                     results.add(resul);
                 }
@@ -856,6 +857,56 @@ public class DAOPost extends ConnectionDB{
 		return status;
     }
     
-    
+    public static int UpdateFlashStart(Post post){
+		
+        int status=0;
+        
+		try{
+            
+			Connection con=getConnection();
+			
+			Properties sql_properties = new Properties();
+			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
+            sql_properties.load(sql_properties_file);
+
+            String statement = sql_properties.getProperty("WaitingToPost");
+
+            PreparedStatement ps=con.prepareStatement(statement);
+            
+            ps.setTimestamp(1,post.getPublication());
+            ps.setTimestamp(2,post.getPublication());
+
+            status = ps.executeUpdate();
+
+		}catch(Exception e){System.out.println(e);}
+		
+		return status;
+    }
+
+    public static int UpdateFlashEnd(Post post){
+		
+        int status=0;
+        
+		try{
+            
+			Connection con=getConnection();
+			
+			Properties sql_properties = new Properties();
+			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
+            sql_properties.load(sql_properties_file);
+
+            String statement = sql_properties.getProperty("PostToArchived");
+
+            PreparedStatement ps=con.prepareStatement(statement);
+            
+            ps.setTimestamp(1,post.getPublication());
+            ps.setTimestamp(2,post.getPublication());
+
+            status = ps.executeUpdate();
+
+		}catch(Exception e){System.out.println(e);}
+		
+		return status;
+    }
 
 }

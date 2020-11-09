@@ -90,6 +90,8 @@ public class ContactManager {
 
                 case 1:
 
+                    aux_contact = new Contact();
+
                     in = new Scanner (System.in);
                     System.out.println("Type the name of the contact below:");
                     buffer = in.nextLine();
@@ -196,6 +198,8 @@ public class ContactManager {
                     }
 
                     else{
+
+                        aux_contact = new Contact();
 
                         in = new Scanner (System.in);
                         System.out.println("Type the email of the contact to update below: ");
@@ -547,10 +551,16 @@ public class ContactManager {
                     System.out.println("No results.");
                 }
             }
+
+            else if (option == 0){
+
+                System.out.println("Exiting the menu.");
+
+            }
             
             else{
 
-                System.out.println("Wrong option. Try using a valid option (between 0-4)");
+                System.out.println("Wrong option. Try using a valid option (between 0-4).");
                 option = in.nextInt();
             }
         
