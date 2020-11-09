@@ -519,6 +519,126 @@ public class DAOPost extends ConnectionDB{
         return results;
     }
 
+    public static ArrayList <Post> QueryByInterests(Post post){
+        
+        Statement stmt = null;
+        ArrayList <Post> results = new ArrayList<Post>();
+        Post resul = null;
+        Contact capsule = new Contact();
+
+        try {
+            
+            Connection con=getConnection();
+            
+            Properties sql_properties = new Properties();
+            FileInputStream sql_properties_file = new FileInputStream("sql.properties");
+            sql_properties.load(sql_properties_file);
+            String statement = sql_properties.getProperty("QueryByInterests");
+            
+            stmt = con.createStatement();
+            
+        
+            for (String string : post.getInterests()) {
+
+                ResultSet rs = stmt.executeQuery(statement + "'" + string + "'");
+                
+                while (rs.next()) {
+
+                    boolean existence = false;
+
+                    capsule.setEmail(rs.getString("Owner"));
+
+                    resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), DAOContact.QueryByEmail(capsule)); 
+
+                    resul.setType(Type.valueOf(rs.getString("Type")));
+                    resul.setStatus(Status.valueOf(rs.getString("Status")));
+                    resul.setPublication(rs.getTimestamp("Publication"));
+                    resul.setDate_start(rs.getTimestamp("Start"));
+                    resul.setDate_end(rs.getTimestamp("End"));
+
+                    ArrayList <String> interests = new ArrayList <String>();
+
+                    interests = SelectInterests(resul);
+                    resul.setInterests(interests);
+
+                    for (Post aux_post : results) {
+                        
+                        if(aux_post.getIdentifier() == resul.getIdentifier()){
+
+                            existence = true;
+                        }
+                    }
+
+                    if(!existence){
+
+                        results.add(resul);
+                    }
+                }
+            }
+
+            if (stmt != null) {
+                
+                stmt.close();
+            }
+                
+        } catch (Exception e) {
+            System.out.println(e);
+        } 
+
+        return results;
+    }
+
+    public static ArrayList <Post> QueryByRecipient(Post post){//comprobar
+        
+        Statement stmt = null;
+        ArrayList <Post> results = new ArrayList<Post>();
+        Post resul = null;
+        Contact capsule = new Contact();
+
+        try {
+            
+            Connection con=getConnection();
+            
+            Properties sql_properties = new Properties();
+            FileInputStream sql_properties_file = new FileInputStream("sql.properties");
+            sql_properties.load(sql_properties_file);
+            String statement = sql_properties.getProperty("QueryByRecipients");
+            
+            stmt = con.createStatement();
+            
+        
+            for (String string : post.getRecipients()) {
+
+                ResultSet rs = stmt.executeQuery(statement + "'" + string + "'");
+                
+                while (rs.next()) {
+
+                    capsule.setEmail(rs.getString("Owner"));
+
+                    resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), DAOContact.QueryByEmail(capsule)); 
+
+                    resul.setType(Type.valueOf(rs.getString("Type")));
+                    resul.setStatus(Status.valueOf(rs.getString("Status")));
+                    resul.setPublication(rs.getTimestamp("Publication"));
+                    resul.setDate_start(rs.getTimestamp("Start"));
+                    resul.setDate_end(rs.getTimestamp("End"));
+
+                    results.add(resul);
+                }
+            }
+
+            if (stmt != null) {
+                
+                stmt.close();
+            }
+                
+        } catch (Exception e) {
+            System.out.println(e);
+        } 
+
+        return results;
+    }
+
     public static ArrayList <String> SelectRecipients(Post post){
         
         Statement stmt = null;

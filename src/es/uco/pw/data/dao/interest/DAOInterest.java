@@ -214,6 +214,8 @@ public class DAOInterest extends ConnectionDB{
 		        ResultSet rs = stmt.executeQuery(statement + "'" + string + "'");
                 
                 while (rs.next()) {
+
+					boolean existence = false;//nuevo
 		    	
                     resul = new Contact(rs.getString("Name"), rs.getString("Surname"), rs.getDate("Birthday"), rs.getString("Email"), rs.getString("Password"));
                     
@@ -224,13 +226,28 @@ public class DAOInterest extends ConnectionDB{
 
                     else{
 
-                        for (Contact contact : contacts) {
+						if(contacts.isEmpty()){//nuevo
+
+							contacts.add(resul);
+						}
+
+						else{//nuevo
+
+							for (Contact contact : contacts) {
                         
-                            if(contact.getEmail().equals(resul.getEmail()) == false ){
-        
-                                contacts.add(resul);
-                            }
-                        }
+								if(contact.getEmail().equals(resul.getEmail())/* == false */){
+			
+									//contacts.add(resul);
+									
+									existence = true;//nuevo
+								}
+							}
+							
+							if(!existence){//nuevo
+	
+								contacts.add(resul);
+							}
+						}
                     }
                 }
                

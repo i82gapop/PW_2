@@ -27,6 +27,7 @@ public class PostManager {
     private static PostManager instance = null;
     SimpleDateFormat format = new SimpleDateFormat("HH:mm/dd-MM-yyyy");
     private Scanner in = new Scanner (System.in);
+    ArrayList <String> interests_list = DAOInterest.ListInterests();
 
     private PostManager(){}
 
@@ -71,8 +72,6 @@ public class PostManager {
                 String buff_title, buff_body;
                 java.sql.Timestamp buff_date_start, buff_date_end;
                 //ArrayList <String> buff_interests = new ArrayList<String>();
-                ArrayList <String> interests_list = DAOInterest.ListInterests();
-
 
                 int option = 1;
 
@@ -635,7 +634,6 @@ public class PostManager {
                     
                     for (Post post : res) {
                         
-                        System.out.println("LLego aqui");
                         System.out.println(post.toString());
                     }
                 }
@@ -648,12 +646,34 @@ public class PostManager {
 
             else if(option == 2){
 
-                System.out.println("Type the interests of the posts to search: ");
-                search_term = in.next();
+                in = new Scanner (System.in);
+                aux_post = new Post();
+                Contact capsule = new Contact();
+
+                System.out.println("What interests does your post have from the following: " + interests_list);
+                in = new Scanner (System.in);
+                search_term = in.nextLine();
+
+                StringTokenizer interests = new StringTokenizer(search_term.replace(" ", ""), ",");
+                ArrayList <String> token_interests = new ArrayList <String>();
+
+                while(interests.hasMoreTokens()){
+
+                    token_interests.add(interests.nextToken().toUpperCase());
+                }
+
+                for(int i = 0; i < token_interests.size(); i++){
+
+                    if(interests_list.contains(token_interests.get(i))){
+
+                        capsule.addInterest(token_interests.get(i));
+                    }
+                }
+
+                aux_post.setInterests(capsule.getInterests());
 
 
-                /*
-                if((res = SearchPostByInterest(search_term.toUpperCase())) != null){
+                if((res = DAOPost.QueryByInterests(aux_post)) != null){
 
                     System.out.println("Showing the results of the search: ");
 
@@ -666,8 +686,7 @@ public class PostManager {
                 else{
 
                     System.out.println("No results.");
-
-                }*/
+                }
             }
 
             else if(option == 3){
@@ -700,15 +719,20 @@ public class PostManager {
                 }
             }
 
-            else if (option == 4){
-                /*
+            else if (option == 4){//probar
+
+                in = new Scanner (System.in);
+                aux_post = new Post();
+                
                 System.out.println("Type the name of the recipient of the posts to search: ");
                 search_term = in.next();
 
-               Contact recipient = manager.SearchContactByEmail(search_term);
+                ArrayList <String> recipients = new ArrayList <String>();
+                recipients.add(search_term);
+                
+                aux_post.setRecipients(recipients);
 
-
-                if((res = SearchPostByRecipient( recipient.getEmail() )) != null){
+                if((res = DAOPost.QueryByRecipient(aux_post)) != null){
 
                     System.out.println("Showing the results of the search: ");
 
@@ -721,7 +745,7 @@ public class PostManager {
                 else{
 
                     System.out.println("No results.");
-                }*/
+                }
             }
 
             else if(option == 0){
