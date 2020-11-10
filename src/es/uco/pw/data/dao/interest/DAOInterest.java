@@ -25,7 +25,9 @@ import es.uco.pw.business.contact.Contact;
 
 public class DAOInterest extends ConnectionDB{
 
+	public DAOInterest(){}
 
+	private Properties sql_properties = new Properties();
 
 
 /**
@@ -39,14 +41,13 @@ public class DAOInterest extends ConnectionDB{
 
 
 
-    public static int Save(Contact contact){
+    public int Save(Contact contact){
 		
 		int status=0;
 		
 		try{
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("InsertInterest");
@@ -77,7 +78,7 @@ public class DAOInterest extends ConnectionDB{
  *
  **/
 
-    public static ArrayList <String> ListInterests(){
+    public ArrayList <String> ListInterests(){
 
 		Statement stmt = null; 
 		ArrayList <String> resul = new ArrayList <String>();
@@ -86,7 +87,6 @@ public class DAOInterest extends ConnectionDB{
 			
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("ListInterests");
@@ -119,7 +119,7 @@ public class DAOInterest extends ConnectionDB{
  *
  **/
 
-    public static ArrayList <String> QueryInterestsByContact(Contact contact){
+    public ArrayList <String> QueryInterestsByContact(Contact contact){
 
 		Statement stmt = null; 
 		ArrayList <String> resul = new ArrayList <String>();
@@ -128,7 +128,6 @@ public class DAOInterest extends ConnectionDB{
 			
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("QueryInterestByEmail");
@@ -160,14 +159,13 @@ public class DAOInterest extends ConnectionDB{
  * @return integer value, it represents the status of the action
  *
  **/
-    public static int Delete(Contact contact){
+    public int Delete(Contact contact){
 		
 		int status=0;
 		
 		try{
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("DeleteInterests");
@@ -193,7 +191,7 @@ public class DAOInterest extends ConnectionDB{
  **/
 
 
-    public static ArrayList<Contact> QueryByInterests(ArrayList <String> interests){
+    public ArrayList<Contact> QueryByInterests(ArrayList <String> interests){
 
         Statement stmt = null; 
 		ArrayList <Contact> contacts = new ArrayList <Contact>();
@@ -203,7 +201,6 @@ public class DAOInterest extends ConnectionDB{
 
             Connection con = getConnection();
             
-            Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
             String statement = sql_properties.getProperty("QueryByInterest");

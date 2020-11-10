@@ -20,7 +20,9 @@ import es.uco.pw.data.dao.common.ConnectionDB;
 
 public class DAOContact extends ConnectionDB{
 	
+	public DAOContact(){}
 
+	private Properties sql_properties = new Properties();
 
 /**
  * Function that saves a given contact to the database Contacts
@@ -30,14 +32,13 @@ public class DAOContact extends ConnectionDB{
  *
  **/
 
-	public static int Save(Contact contact){
+	public int Save(Contact contact){
 		
 		int status=0;
 		
 		try{
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("Insert");
@@ -64,14 +65,13 @@ public class DAOContact extends ConnectionDB{
  * @return integer value, it represents the status of the action
  *
  **/
-	public static int Update(Contact contact){
+	public int Update(Contact contact){
 		
 		int status=0;
 		
 		try{
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("Update");
@@ -98,14 +98,13 @@ public class DAOContact extends ConnectionDB{
  *
  **/
 
-	public static int UpdatePassword(Contact contact){
+	public int UpdatePassword(Contact contact){
 		
 		int status=0;
 		
 		try{
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("UpdatePassword");
@@ -129,14 +128,13 @@ public class DAOContact extends ConnectionDB{
  *
  **/
 
-	public static int Delete(Contact contact){
+	public int Delete(Contact contact){
 		
 		int status=0;
 		
 		try{
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("Delete");
@@ -158,7 +156,7 @@ public class DAOContact extends ConnectionDB{
  *
  **/
 	
-	public static ArrayList <Contact> ListContacts(){
+	public ArrayList <Contact> ListContacts(){
 
 		Statement stmt = null; 
 		ArrayList <Contact> resul = new ArrayList <Contact>();
@@ -168,7 +166,6 @@ public class DAOContact extends ConnectionDB{
 			
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("ListContacts");
@@ -203,7 +200,7 @@ public class DAOContact extends ConnectionDB{
  *
  **/
 
-	public static Contact QueryByEmail (Contact contact){
+	public Contact QueryByEmail (Contact contact){
 		
 		Statement stmt = null; 
 		Contact resul = null;
@@ -212,7 +209,6 @@ public class DAOContact extends ConnectionDB{
 			
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("QueryByEmail");
@@ -244,7 +240,7 @@ public class DAOContact extends ConnectionDB{
  *
  **/
 
-	public static ArrayList <Contact> QueryByName (Contact contact){
+	public ArrayList <Contact> QueryByName (Contact contact){
 		
 		Statement stmt = null; 
 		ArrayList <Contact> resul = new ArrayList <Contact>();
@@ -254,7 +250,6 @@ public class DAOContact extends ConnectionDB{
 			
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("QueryByName");
@@ -288,7 +283,7 @@ public class DAOContact extends ConnectionDB{
  *
  **/
 
-	public static ArrayList <Contact> QueryBySurname (Contact contact){
+	public ArrayList <Contact> QueryBySurname (Contact contact){
 		
 		Statement stmt = null; 
 		ArrayList <Contact> resul = new ArrayList <Contact>();
@@ -298,7 +293,6 @@ public class DAOContact extends ConnectionDB{
 			
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("QueryBySurname");
@@ -332,7 +326,7 @@ public class DAOContact extends ConnectionDB{
  *
  **/
 
-	public static ArrayList <Contact> QueryByFullname (Contact contact){
+	public ArrayList <Contact> QueryByFullname (Contact contact){
 		
 		ArrayList <Contact> resul = new ArrayList <Contact>();
 		Contact aux = null; 
@@ -341,7 +335,6 @@ public class DAOContact extends ConnectionDB{
 			
 			Connection con=getConnection();
 
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("QueryByFullname");
@@ -378,7 +371,7 @@ public class DAOContact extends ConnectionDB{
  * @return ArrayList <Contact>, a list of contacts with the given age
  *
  **/
-	public static ArrayList <Contact> QueryByAge (int Age){
+	public ArrayList <Contact> QueryByAge (int Age){
 		
 		Statement stmt = null; 
 		ArrayList <Contact> resul = new ArrayList <Contact>();
@@ -388,7 +381,6 @@ public class DAOContact extends ConnectionDB{
 			
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("ListContacts");

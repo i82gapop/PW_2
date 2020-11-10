@@ -25,6 +25,8 @@ public class ContactManager {
     // Singleton declaration
     private static ContactManager instance = null;
     private Scanner in = new Scanner (System.in);
+    private DAOContact daoContact = new DAOContact();
+    private DAOInterest daoInterest = new DAOInterest();
 
     // private constructor
 
@@ -113,7 +115,7 @@ public class ContactManager {
 
                     if(!checkExistence(aux_contact)){
 
-                        ArrayList <String> interests_list = DAOInterest.ListInterests();
+                        ArrayList <String> interests_list = daoInterest.ListInterests();
 
                         System.out.println("What interests does your contact have from the following: " + interests_list);
 
@@ -136,8 +138,8 @@ public class ContactManager {
                             }
                         }
 
-                        DAOContact.Save(aux_contact);
-                        DAOInterest.Save(aux_contact);
+                        daoContact.Save(aux_contact);
+                        daoInterest.Save(aux_contact);
                     }
 
                     else {
@@ -171,10 +173,10 @@ public class ContactManager {
 
                         else{
 
-                            if(DAOContact.QueryByEmail(aux_contact).getPassword().equals(buffer)){
+                            if(daoContact.QueryByEmail(aux_contact).getPassword().equals(buffer)){
                                 
-                                DAOContact.Delete(aux_contact);
-                                DAOInterest.Delete(aux_contact);
+                                daoContact.Delete(aux_contact);
+                                daoInterest.Delete(aux_contact);
 
                             }
 
@@ -212,7 +214,7 @@ public class ContactManager {
 
                             System.out.println("Type the password of the contact: ");
                             buffer = in.next();
-                            if(DAOContact.QueryByEmail(aux_contact).getPassword().equals(buffer)){
+                            if(daoContact.QueryByEmail(aux_contact).getPassword().equals(buffer)){
 
                             
                             try{
@@ -234,7 +236,7 @@ public class ContactManager {
                                 aux_contact.setBirthday(sql_date);
 
 
-                                ArrayList <String> interests_list = DAOInterest.ListInterests();
+                                ArrayList <String> interests_list = daoInterest.ListInterests();
 
                                 System.out.println("What new interests does your contact have from the following: " + interests_list);
 
@@ -258,9 +260,9 @@ public class ContactManager {
                                     }
                                 }
 
-                                DAOInterest.Delete(aux_contact);
-                                DAOContact.Update(aux_contact);
-                                DAOInterest.Save(aux_contact);
+                                daoInterest.Delete(aux_contact);
+                                daoContact.Update(aux_contact);
+                                daoInterest.Save(aux_contact);
 
                             }catch(ParseException e){
                                     System.out.println("Not a valid format for the date, try with this format: dd/MM/yyyy.");
@@ -290,13 +292,13 @@ public class ContactManager {
 
                     else{
 
-                        contacts = DAOContact.ListContacts();
+                        contacts = daoContact.ListContacts();
 
                         System.out.println("---------------------------Contacts---------------------------");        
 
                         for (Contact contact : contacts) {
                             
-                            contact.setInterest(DAOInterest.QueryInterestsByContact(contact));
+                            contact.setInterest(daoInterest.QueryInterestsByContact(contact));
                             System.out.println(contact.toString());    
                         }
 
@@ -322,13 +324,13 @@ public class ContactManager {
 
                         System.out.println("Type the old password of the contact: ");
                         buffer = in.next();
-                        if(DAOContact.QueryByEmail(aux_contact).getPassword().equals(buffer)){
+                        if(daoContact.QueryByEmail(aux_contact).getPassword().equals(buffer)){
 
                             System.out.println("Type the new password of the contact: ");
                             buffer = in.next();
                             aux_contact.setPassword(buffer);
 
-                            DAOContact.UpdatePassword(aux_contact);
+                            daoContact.UpdatePassword(aux_contact);
 
                             System.out.println("Password changed successfully.");
 
@@ -367,7 +369,7 @@ public class ContactManager {
         
         else{
 
-            if(DAOContact.QueryByEmail(contact) == null){
+            if(daoContact.QueryByEmail(contact) == null){
 
                 return false;
             }
@@ -390,7 +392,7 @@ public class ContactManager {
 
     public boolean isEmpty(){
 
-        if(DAOContact.ListContacts() == null){
+        if(daoContact.ListContacts() == null){
 
             return true;
         }
@@ -432,11 +434,11 @@ public class ContactManager {
                 search_term = in.next();
                 aux_contact.setEmail(search_term);
 
-                if((single = DAOContact.QueryByEmail(aux_contact)) != null){
+                if((single = daoContact.QueryByEmail(aux_contact)) != null){
 
                     System.out.println("Showing the result of the search: ");
                     System.out.println("---------------------------Result---------------------------");
-                    single.setInterest(DAOInterest.QueryInterestsByContact(single));    
+                    single.setInterest(daoInterest.QueryInterestsByContact(single));    
                     System.out.println(single.toString());
                     System.out.println("--------------------------------------------------------------");       
 
@@ -462,13 +464,13 @@ public class ContactManager {
                 search_term = in.nextLine();
                 aux_contact.setSurname(search_term);
 
-                if((compound = DAOContact.QueryByFullname(aux_contact)) != null){
+                if((compound = daoContact.QueryByFullname(aux_contact)) != null){
 
                     System.out.println("Showing the results of the search: ");
                     System.out.println("---------------------------Results---------------------------");    
                     for(int i = 0; i < compound.size(); i++){
 
-                        compound.get(i).setInterest(DAOInterest.QueryInterestsByContact(compound.get(i)));   
+                        compound.get(i).setInterest(daoInterest.QueryInterestsByContact(compound.get(i)));   
                         System.out.println(compound.get(i).toString());
                     }
                     System.out.println("--------------------------------------------------------------");    
@@ -482,7 +484,7 @@ public class ContactManager {
 
             else if(option == 3){
 
-                ArrayList <String> interests_list = DAOInterest.ListInterests();
+                ArrayList <String> interests_list = daoInterest.ListInterests();
 
                 System.out.println("Type the interest of the contact to search: " + interests_list);
                 in = new Scanner (System.in);
@@ -506,13 +508,13 @@ public class ContactManager {
 
                 token_interests = aux_contact.getInterests();
 
-                if((compound = DAOInterest.QueryByInterests(token_interests)) != null){
+                if((compound = daoInterest.QueryByInterests(token_interests)) != null){
 
                     System.out.println("Showing the results of the search: ");
                     System.out.println("---------------------------Results---------------------------");    
                     for(int i = 0; i < compound.size(); i++){
 
-                        compound.get(i).setInterest(DAOInterest.QueryInterestsByContact(compound.get(i)));  
+                        compound.get(i).setInterest(daoInterest.QueryInterestsByContact(compound.get(i)));  
                         System.out.println(compound.get(i).toString());
                     }
                     System.out.println("--------------------------------------------------------------");  
@@ -530,13 +532,13 @@ public class ContactManager {
                 search_term_int = in.nextInt();
 
 
-                if((compound = DAOContact.QueryByAge(search_term_int)) != null){
+                if((compound = daoContact.QueryByAge(search_term_int)) != null){
 
                     System.out.println("Showing the results of the search: ");
                     System.out.println("---------------------------Results---------------------------");    
                     for(int i = 0; i < compound.size(); i++){
 
-                        compound.get(i).setInterest(DAOInterest.QueryInterestsByContact(compound.get(i)));  
+                        compound.get(i).setInterest(daoInterest.QueryInterestsByContact(compound.get(i)));  
                         System.out.println(compound.get(i).toString());
                     }
                     System.out.println("--------------------------------------------------------------");

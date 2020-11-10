@@ -27,7 +27,10 @@ public class PostManager {
     private static PostManager instance = null;
     SimpleDateFormat format = new SimpleDateFormat("HH:mm/dd-MM-yyyy");
     private Scanner in = new Scanner (System.in);
-    ArrayList <String> interests_list = DAOInterest.ListInterests();
+    private DAOContact daoContact = new DAOContact();
+    private DAOInterest daoInterest = new DAOInterest();
+    private DAOPost daoPost = new DAOPost();
+    ArrayList <String> interests_list = daoInterest.ListInterests();
 
     private PostManager(){}
 
@@ -68,7 +71,7 @@ public class PostManager {
 
 
         
-        if((user = DAOContact.QueryByEmail(user)) != null){
+        if((user = daoContact.QueryByEmail(user)) != null){
 
             if(user.getPassword().equals(buffer)){
                 
@@ -145,7 +148,7 @@ public class PostManager {
                                     aux_post = new Post(0, buff_title, buff_body, user);
                                     aux_post.setType(Type.GENERAL);
 
-                                    DAOPost.Save(aux_post);
+                                    daoPost.Save(aux_post);
 
                                     System.out.println("Post created successfully.");
 
@@ -187,7 +190,7 @@ public class PostManager {
                                     aux_post.setInterests(capsule.getInterests());
                                     aux_post.setType(Type.THEMATIC);
 
-                                    DAOPost.Save(aux_post);
+                                    daoPost.Save(aux_post);
 
                                     System.out.println("Post created successfully.");
 
@@ -222,7 +225,7 @@ public class PostManager {
 
                                         capsule.setEmail(token_recipients.get(i));
 
-                                        if(DAOContact.QueryByEmail(capsule)!=null){
+                                        if(daoContact.QueryByEmail(capsule)!=null){
 
                                             buff_recipients.add(token_recipients.get(i));
                                         }
@@ -232,7 +235,7 @@ public class PostManager {
                                     aux_post.setRecipients(buff_recipients);
                                     aux_post.setType(Type.INDIVIDUALIZED);
 
-                                    DAOPost.Save(aux_post);
+                                    daoPost.Save(aux_post);
 
                                     System.out.println("Post created successfully.");
 
@@ -265,7 +268,7 @@ public class PostManager {
                                     aux_post.setDate_end(buff_date_end);
                                     aux_post.setType(Type.FLASH);
 
-                                    DAOPost.Save(aux_post);
+                                    daoPost.Save(aux_post);
 
                                     System.out.println("Post created successfully.");
 
@@ -285,14 +288,14 @@ public class PostManager {
 
                             aux_post.setIdentifier(id);
 
-                            if(DAOPost.QueryByID(aux_post) != null) {
+                            if(daoPost.QueryByID(aux_post) != null) {
 
-                                if(DAOPost.QueryByID(aux_post).getOwner().getEmail().equals(user.getEmail())){
+                                if(daoPost.QueryByID(aux_post).getOwner().getEmail().equals(user.getEmail())){
 
-                                    aux_post = DAOPost.QueryByID(aux_post);
+                                    aux_post = daoPost.QueryByID(aux_post);
                                     aux_post.setStatus(Status.POSTED);
 
-                                    DAOPost.UpdateStatus(aux_post);
+                                    daoPost.UpdateStatus(aux_post);
                                 }
 
                                 else{
@@ -313,7 +316,7 @@ public class PostManager {
 
                             aux_post = new Post();
                             aux_post.setIdentifier(id);
-                            aux_post = DAOPost.QueryByID(aux_post);
+                            aux_post = daoPost.QueryByID(aux_post);
 
                             if(aux_post != null){
                                 if(aux_post.getStatus() == Status.EDITED){
@@ -442,7 +445,7 @@ public class PostManager {
                                                     
                                                         capsule.setEmail(token_recipients_.get(i));
                                                     
-                                                        if(DAOContact.QueryByEmail(capsule)!=null){
+                                                        if(daoContact.QueryByEmail(capsule)!=null){
                                                         
                                                             buff_recipients_.add(token_recipients_.get(i));
                                                         }
@@ -499,7 +502,7 @@ public class PostManager {
                                                     System.out.println("Cancelled.");
                                                 }
                                                 else{
-                                                DAOPost.Update(aux_post);
+                                                daoPost.Update(aux_post);
                                                 System.out.println("All changes saved in the Database.");
                                                 }
                                             }
@@ -535,14 +538,14 @@ public class PostManager {
 
                                 aux_post.setIdentifier(id);
 
-                                if(DAOPost.QueryByID(aux_post) != null) {
+                                if(daoPost.QueryByID(aux_post) != null) {
 
-                                    if(DAOPost.QueryByID(aux_post).getOwner().getEmail().equals(user.getEmail())){
+                                    if(daoPost.QueryByID(aux_post).getOwner().getEmail().equals(user.getEmail())){
 
-                                        aux_post = DAOPost.QueryByID(aux_post);
+                                        aux_post = daoPost.QueryByID(aux_post);
                                         aux_post.setStatus(Status.ARCHIVED);
 
-                                        DAOPost.UpdateStatus(aux_post);
+                                        daoPost.UpdateStatus(aux_post);
                                     }
 
                                     else{
@@ -580,7 +583,7 @@ public class PostManager {
                             
                             if(sub_option_ex == 1){
 
-                                res = DAOPost.OrderByOwner();
+                                res = daoPost.OrderByOwner();
                                 
                                 System.out.println("==========================================================================");
                                 System.out.println("Showing the board for " + user.getEmail());
@@ -638,7 +641,7 @@ public class PostManager {
 
                             else if(sub_option_ex == 2){
                                 
-                                res = DAOPost.OrderByDate();
+                                res = daoPost.OrderByDate();
 
                                 System.out.println("==========================================================================");
                                 System.out.println("Showing the board for " + user.getEmail());
@@ -767,7 +770,7 @@ public class PostManager {
 
                 aux_post.setPublication(publication);
 
-                if((res = DAOPost.QueryByDate(aux_post)) != null){
+                if((res = daoPost.QueryByDate(aux_post)) != null){
 
                     System.out.println("Showing the result of the search: ");
                     
@@ -812,7 +815,7 @@ public class PostManager {
                 aux_post.setInterests(capsule.getInterests());
 
 
-                if((res = DAOPost.QueryByInterests(aux_post)) != null){
+                if((res = daoPost.QueryByInterests(aux_post)) != null){
 
                     System.out.println("Showing the results of the search: ");
 
@@ -839,9 +842,9 @@ public class PostManager {
                 Contact capsule = new Contact();
                 capsule.setEmail(search_term);
 
-                aux_post.setOwner(DAOContact.QueryByEmail(capsule));
+                aux_post.setOwner(daoContact.QueryByEmail(capsule));
                 
-                if((res = DAOPost.QueryByOwner(aux_post)) != null){
+                if((res = daoPost.QueryByOwner(aux_post)) != null){
 
                     System.out.println("Showing the results of the search: ");
 
@@ -870,7 +873,7 @@ public class PostManager {
                 
                 aux_post.setRecipients(recipients);
 
-                if((res = DAOPost.QueryByRecipient(aux_post)) != null){
+                if((res = daoPost.QueryByRecipient(aux_post)) != null){
 
                     System.out.println("Showing the results of the search: ");
 
@@ -906,7 +909,7 @@ public class PostManager {
 
         aux_post.setPublication(system_time);
 
-        DAOPost.UpdateFlashStart(aux_post);
-        DAOPost.UpdateFlashEnd(aux_post);
+        daoPost.UpdateFlashStart(aux_post);
+        daoPost.UpdateFlashEnd(aux_post);
     }   
 }

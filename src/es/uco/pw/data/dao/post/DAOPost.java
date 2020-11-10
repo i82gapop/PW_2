@@ -30,6 +30,11 @@ import es.uco.pw.data.dao.contact.DAOContact;
 
 public class DAOPost extends ConnectionDB{
 
+    public DAOPost(){}
+
+    private Properties sql_properties = new Properties();
+    private DAOContact daoContact = new DAOContact();
+
 
     /**
     * Function that saves a given post to the database Posts
@@ -39,7 +44,7 @@ public class DAOPost extends ConnectionDB{
     *
     **/
 
-	public static int Save(Post post){
+	public int Save(Post post){
 		
         int status=0;
         
@@ -47,7 +52,6 @@ public class DAOPost extends ConnectionDB{
             
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
             sql_properties.load(sql_properties_file);
             
@@ -186,7 +190,7 @@ public class DAOPost extends ConnectionDB{
      *
      **/
 
-    public static int SaveBis(Post post){
+    public int SaveBis(Post post){
 		
         int status=0;
         
@@ -194,7 +198,6 @@ public class DAOPost extends ConnectionDB{
             
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
             sql_properties.load(sql_properties_file);
     
@@ -242,14 +245,13 @@ public class DAOPost extends ConnectionDB{
      *
      **/
 
-    public static int UpdateStatus(Post post){
+    public int UpdateStatus(Post post){
 		
         int status=0;
 		
 		try{
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("UpdateStatus");
@@ -339,7 +341,7 @@ public class DAOPost extends ConnectionDB{
      *
      **/
 
-    public static Post QueryByID(Post post){
+    public Post QueryByID(Post post){
         
         Statement stmt = null;
         Post resul = null;
@@ -349,7 +351,6 @@ public class DAOPost extends ConnectionDB{
             
             Connection con=getConnection();
             
-            Properties sql_properties = new Properties();
             FileInputStream sql_properties_file = new FileInputStream("sql.properties");
             sql_properties.load(sql_properties_file);
             String statement = sql_properties.getProperty("QueryByID");
@@ -361,7 +362,7 @@ public class DAOPost extends ConnectionDB{
 
                 capsule.setEmail(rs.getString("Owner"));
                 
-                resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), DAOContact.QueryByEmail(capsule));
+                resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), daoContact.QueryByEmail(capsule));
 
                 resul.setType(Type.valueOf(rs.getString("Type")));
                 resul.setStatus(Status.valueOf(rs.getString("Status")));
@@ -391,7 +392,7 @@ public class DAOPost extends ConnectionDB{
      *
      **/
 
-    public static ArrayList <Post> QueryByDate(Post post){
+    public ArrayList <Post> QueryByDate(Post post){
         
         Statement stmt = null;
         ArrayList <Post> results = new ArrayList<Post>();
@@ -402,7 +403,6 @@ public class DAOPost extends ConnectionDB{
             
             Connection con=getConnection();
             
-            Properties sql_properties = new Properties();
             FileInputStream sql_properties_file = new FileInputStream("sql.properties");
             sql_properties.load(sql_properties_file);
             String statement = sql_properties.getProperty("QueryByDate");
@@ -418,7 +418,7 @@ public class DAOPost extends ConnectionDB{
 
                 capsule.setEmail(rs.getString("Owner"));
                 
-                resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), DAOContact.QueryByEmail(capsule)); 
+                resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), daoContact.QueryByEmail(capsule)); 
 
                 resul.setType(Type.valueOf(rs.getString("Type")));
                 resul.setStatus(Status.valueOf(rs.getString("Status")));
@@ -457,7 +457,7 @@ public class DAOPost extends ConnectionDB{
         return results;
     }
 
-    public static ArrayList <Post> QueryByOwner(Post post){
+    public ArrayList <Post> QueryByOwner(Post post){
         
         Statement stmt = null;
         ArrayList <Post> results = new ArrayList<Post>();
@@ -468,7 +468,6 @@ public class DAOPost extends ConnectionDB{
             
             Connection con=getConnection();
             
-            Properties sql_properties = new Properties();
             FileInputStream sql_properties_file = new FileInputStream("sql.properties");
             sql_properties.load(sql_properties_file);
             String statement = sql_properties.getProperty("QueryByOwner");
@@ -480,7 +479,7 @@ public class DAOPost extends ConnectionDB{
 
                 capsule.setEmail(rs.getString("Owner"));
                 
-                resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), DAOContact.QueryByEmail(capsule)); 
+                resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), daoContact.QueryByEmail(capsule)); 
 
                 resul.setType(Type.valueOf(rs.getString("Type")));
                 resul.setStatus(Status.valueOf(rs.getString("Status")));
@@ -519,7 +518,7 @@ public class DAOPost extends ConnectionDB{
         return results;
     }
 
-    public static ArrayList <Post> QueryByInterests(Post post){
+    public ArrayList <Post> QueryByInterests(Post post){
         
         Statement stmt = null;
         ArrayList <Post> results = new ArrayList<Post>();
@@ -529,8 +528,7 @@ public class DAOPost extends ConnectionDB{
         try {
             
             Connection con=getConnection();
-            
-            Properties sql_properties = new Properties();
+
             FileInputStream sql_properties_file = new FileInputStream("sql.properties");
             sql_properties.load(sql_properties_file);
             String statement = sql_properties.getProperty("QueryByInterests");
@@ -548,7 +546,7 @@ public class DAOPost extends ConnectionDB{
 
                     capsule.setEmail(rs.getString("Owner"));
 
-                    resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), DAOContact.QueryByEmail(capsule)); 
+                    resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), daoContact.QueryByEmail(capsule)); 
 
                     resul.setType(Type.valueOf(rs.getString("Type")));
                     resul.setStatus(Status.valueOf(rs.getString("Status")));
@@ -588,7 +586,7 @@ public class DAOPost extends ConnectionDB{
         return results;
     }
 
-    public static ArrayList <Post> QueryByRecipient(Post post){//comprobar
+    public ArrayList <Post> QueryByRecipient(Post post){//comprobar
         
         Statement stmt = null;
         ArrayList <Post> results = new ArrayList<Post>();
@@ -599,7 +597,6 @@ public class DAOPost extends ConnectionDB{
             
             Connection con=getConnection();
             
-            Properties sql_properties = new Properties();
             FileInputStream sql_properties_file = new FileInputStream("sql.properties");
             sql_properties.load(sql_properties_file);
             String statement = sql_properties.getProperty("QueryByRecipients");
@@ -615,7 +612,7 @@ public class DAOPost extends ConnectionDB{
 
                     capsule.setEmail(rs.getString("Owner"));
 
-                    resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), DAOContact.QueryByEmail(capsule)); 
+                    resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), daoContact.QueryByEmail(capsule)); 
 
                     resul.setType(Type.valueOf(rs.getString("Type")));
                     resul.setStatus(Status.valueOf(rs.getString("Status")));
@@ -640,7 +637,7 @@ public class DAOPost extends ConnectionDB{
         return results;
     }
 
-    public static ArrayList <String> SelectRecipients(Post post){
+    public ArrayList <String> SelectRecipients(Post post){
         
         Statement stmt = null;
         ArrayList <String> recipients = new ArrayList<String>();
@@ -648,8 +645,7 @@ public class DAOPost extends ConnectionDB{
         try {
             
             Connection con=getConnection();
-            
-            Properties sql_properties = new Properties();
+
             FileInputStream sql_properties_file = new FileInputStream("sql.properties");
             sql_properties.load(sql_properties_file);
             String statement = sql_properties.getProperty("SelectRecipients");
@@ -674,7 +670,7 @@ public class DAOPost extends ConnectionDB{
         return recipients;
     }
     
-    public static ArrayList <String> SelectInterests(Post post){
+    public ArrayList <String> SelectInterests(Post post){
         
         Statement stmt = null;
         ArrayList <String> recipients = new ArrayList<String>();
@@ -682,8 +678,7 @@ public class DAOPost extends ConnectionDB{
         try {
             
             Connection con=getConnection();
-            
-            Properties sql_properties = new Properties();
+
             FileInputStream sql_properties_file = new FileInputStream("sql.properties");
             sql_properties.load(sql_properties_file);
             String statement = sql_properties.getProperty("SelectInterests");
@@ -719,14 +714,13 @@ public class DAOPost extends ConnectionDB{
      *
      **/
 
-    public static int DeleteInterests(Post post){
+    public int DeleteInterests(Post post){
 		
 		int status=0;
 		
 		try{
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("DeletePostInterests");
@@ -749,14 +743,13 @@ public class DAOPost extends ConnectionDB{
      *
      **/
 
-    public static int DeleteRecipients(Post post){
+    public int DeleteRecipients(Post post){
 		
 		int status=0;
 		
 		try{
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
 			sql_properties.load(sql_properties_file);
 			String statement = sql_properties.getProperty("DeletePostRecipients");
@@ -780,7 +773,7 @@ public class DAOPost extends ConnectionDB{
      *
      **/
 
-    public static int Update(Post post){
+    public int Update(Post post){
 		
         int status=0;
         
@@ -788,7 +781,6 @@ public class DAOPost extends ConnectionDB{
             
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
             sql_properties.load(sql_properties_file);
             
@@ -857,7 +849,7 @@ public class DAOPost extends ConnectionDB{
 		return status;
     }
     
-    public static int UpdateFlashStart(Post post){
+    public int UpdateFlashStart(Post post){
 		
         int status=0;
         
@@ -865,7 +857,6 @@ public class DAOPost extends ConnectionDB{
             
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
             sql_properties.load(sql_properties_file);
 
@@ -883,7 +874,7 @@ public class DAOPost extends ConnectionDB{
 		return status;
     }
 
-    public static int UpdateFlashEnd(Post post){
+    public int UpdateFlashEnd(Post post){
 		
         int status=0;
         
@@ -891,7 +882,6 @@ public class DAOPost extends ConnectionDB{
             
 			Connection con=getConnection();
 			
-			Properties sql_properties = new Properties();
 			FileInputStream sql_properties_file = new FileInputStream("sql.properties");
             sql_properties.load(sql_properties_file);
 
@@ -909,7 +899,7 @@ public class DAOPost extends ConnectionDB{
 		return status;
     }
 
-    public static ArrayList <Post> OrderByOwner(){
+    public ArrayList <Post> OrderByOwner(){
         
         Statement stmt = null;
         ArrayList <Post> results = new ArrayList<Post>();
@@ -920,7 +910,6 @@ public class DAOPost extends ConnectionDB{
             
             Connection con=getConnection();
             
-            Properties sql_properties = new Properties();
             FileInputStream sql_properties_file = new FileInputStream("sql.properties");
             sql_properties.load(sql_properties_file);
             String statement = sql_properties.getProperty("OrderByOwner");
@@ -935,7 +924,7 @@ public class DAOPost extends ConnectionDB{
 
                 capsule.setEmail(rs.getString("Owner"));
 
-                resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), DAOContact.QueryByEmail(capsule)); 
+                resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), daoContact.QueryByEmail(capsule)); 
 
                 resul.setType(Type.valueOf(rs.getString("Type")));
                 resul.setStatus(Status.valueOf(rs.getString("Status")));
@@ -977,7 +966,7 @@ public class DAOPost extends ConnectionDB{
         return results;
     }
 
-    public static ArrayList <Post> OrderByDate(){
+    public ArrayList <Post> OrderByDate(){
         
         Statement stmt = null;
         ArrayList <Post> results = new ArrayList<Post>();
@@ -987,8 +976,7 @@ public class DAOPost extends ConnectionDB{
         try {
             
             Connection con=getConnection();
-            
-            Properties sql_properties = new Properties();
+
             FileInputStream sql_properties_file = new FileInputStream("sql.properties");
             sql_properties.load(sql_properties_file);
             String statement = sql_properties.getProperty("OrderByDate");
@@ -1003,7 +991,7 @@ public class DAOPost extends ConnectionDB{
 
                 capsule.setEmail(rs.getString("Owner"));
 
-                resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), DAOContact.QueryByEmail(capsule)); 
+                resul = new Post(rs.getInt("ID"), rs.getString("Title"), rs.getString("Body"), daoContact.QueryByEmail(capsule)); 
 
                 resul.setType(Type.valueOf(rs.getString("Type")));
                 resul.setStatus(Status.valueOf(rs.getString("Status")));
