@@ -582,11 +582,57 @@ public class PostManager {
 
                                 res = DAOPost.OrderByOwner();
                                 
-                                System.out.println("Showing the posts posted order by owner");
+                                System.out.println("==========================================================================");
+                                System.out.println("Showing the board for " + user.getEmail());
+                                System.out.println("==========================================================================");
+                                System.out.println("General Posts: ");
+                                System.out.println("==========================================================================");
+
 
                                 for (Post post : res) {
                                     
-                                    System.out.println(post.toString());
+                                    if(post.getType().equals(Type.GENERAL)){
+
+                                        System.out.println(post.toString());
+                                    }
+                                }
+
+                                System.out.println("==========================================================================");
+                                System.out.println("Individualized Posts: ");
+                                System.out.println("==========================================================================");
+
+
+                                for (Post post : res) {
+                                    
+                                    if(post.getType().equals(Type.INDIVIDUALIZED)){
+
+                                        System.out.println(post.toString());
+                                    }
+                                }
+
+                                System.out.println("==========================================================================");
+                                System.out.println("Thematic Posts: ");
+                                System.out.println("==========================================================================");
+
+                                for (Post post : res) {
+                                    
+                                    if(post.getType().equals(Type.THEMATIC)){
+
+                                        System.out.println(post.toString());
+                                    }
+                                }
+
+                                System.out.println("==========================================================================");
+                                System.out.println("Flash Posts: ");
+                                System.out.println("==========================================================================");
+
+
+                                for (Post post : res) {
+                                    
+                                    if(post.getType().equals(Type.FLASH)){
+
+                                        System.out.println(post.toString());
+                                    }
                                 }
                             }
 
@@ -594,11 +640,58 @@ public class PostManager {
                                 
                                 res = DAOPost.OrderByDate();
 
-                                System.out.println("Showing the posts posted order by owner");
+                                System.out.println("==========================================================================");
+                                System.out.println("Showing the board for " + user.getEmail());
+                                System.out.println("==========================================================================");
+                                System.out.println("General Posts: ");
+                                System.out.println("==========================================================================");
+
 
                                 for (Post post : res) {
                                     
-                                    System.out.println(post.toString());
+                                    if(post.getType().equals(Type.GENERAL)){
+
+                                        System.out.println(post.toString());
+                                    }
+                                }
+
+                                System.out.println("==========================================================================");
+                                System.out.println("Individualized Posts: ");
+                                System.out.println("==========================================================================");
+
+
+                                for (Post post : res) {
+                                    
+                                    if(post.getType().equals(Type.INDIVIDUALIZED)){
+
+                                        System.out.println(post.toString());
+                                    }
+                                }
+
+                                System.out.println("==========================================================================");
+                                System.out.println("Thematic Posts: ");
+                                System.out.println("==========================================================================");
+
+
+                                for (Post post : res) {
+                                    
+                                    if(post.getType().equals(Type.THEMATIC)){
+
+                                        System.out.println(post.toString());
+                                    }
+                                }
+
+                                System.out.println("==========================================================================");
+                                System.out.println("Flash Posts: ");
+                                System.out.println("==========================================================================");
+
+
+                                for (Post post : res) {
+                                    
+                                    if(post.getType().equals(Type.FLASH)){
+
+                                        System.out.println(post.toString());
+                                    }
                                 }
                             }
 

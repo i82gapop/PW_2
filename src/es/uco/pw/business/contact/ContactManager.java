@@ -19,10 +19,6 @@ import es.uco.pw.data.dao.interest.DAOInterest;
  *
  * */
 
-
-
-
-
 public class ContactManager {
 
     
